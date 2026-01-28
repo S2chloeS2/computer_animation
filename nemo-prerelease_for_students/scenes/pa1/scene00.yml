@@ -1,0 +1,14 @@
+solver:
+  type: explicit_euler # integrator type
+  timestep: 0.0001   # timestep size
+
+
+# A list of particles added explicitly
+particles:
+  # 1st particle
+  - pos: [0, 0, 3] 
+    vel: [0, 0, 0]  # optional (default (0, 0, 0))
+    fixed: false    # optional (default flase)
+    radius: 0.2     # optional
+    mass: 2.4
+
