@@ -17,39 +17,40 @@ class ExplicitEulerSolver(SolverBase):
 
     @override
     def step(self, state_in: State, state_out: State, dt: float | None = None):
-        """
-        Simulate the model for a given time step.
 
-        Args:
-            state_in (State): The input state.
-            state_out (State): The output state.
-            control (Control): The control input.
-                Defaults to `None` which means the control values from the
-                :class:`Model` are used.
-            contacts (Contacts): The contact information.
-            dt (float): The time step (typically in seconds).
-
-        NOTE:
-            When dt is None, this step call will use the default timestep size
-            stored in self.dt. Otherwise, the given dt will be used.
-        """
-        # increase simulated time
         if dt is None:
             dt = self.dt
         self.ts += dt
 
-        eval_spring_forces(self.model, state_in)
+        model = self.model
 
-        # TODO: Implement your explicit euler algorithm here.
-        # At the high-level, it will be a for loop through all particles: 
-        #  for i in range(self.model.particle_count):
-        #    ... advance the position (in particle_q) and velocity (in particle_qd) of particle i
-        #
-        # The updated particle positions and velocities are stored in `state_out.particle_q` and `state_out.particle_qd`
+        # 1. copy state
+        state_out.particle_q[:] = state_in.particle_q
+        state_out.particle_qd[:] = state_in.particle_qd
 
-        # NOTE: The following code are dummy code. They are NOT a part of the implementation of an ExplictEuler
-        #       They are here just to ensure the starter code can be run and the viewer can be launched.
-        #       When you finish your PA, PLEASE remove the next three lines of code
-        for ii in range(self.model.particle_count):
-            state_out.particle_q[ii] = state_in.particle_q[ii]
-            state_out.particle_qd[ii] = state_in.particle_qd[ii]
+        # 2. compute forces
+        state_in.clear_forces()
+        eval_spring_forces(model, state_in)
+
+        # 3. Explicit Euler
+        for ii in range(model.particle_count):
+            print("force:", state_in.particle_f)
+
+            if model.particle_flags[ii] & ParticleFlags.ACTIVE.value == 0:
+                continue
+
+            inv_m = model.particle_inv_mass[ii]
+
+            # v_{n+1} = v_n + dt * M^{-1} * F
+            state_out.particle_qd[ii] = (
+                    state_in.particle_qd[ii]
+                    + dt * inv_m * state_in.particle_f[ii]
+            )
+
+            # q_{n+1} = q_n + dt * v_n
+            state_out.particle_q[ii] = (
+                    state_in.particle_q[ii]
+                    + dt * state_in.particle_qd[ii]
+            )
+
+
