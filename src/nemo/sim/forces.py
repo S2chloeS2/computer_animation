@@ -3,6 +3,8 @@ import numpy as np
 
 from .model import Model
 from .state import State
+from ..geometry import ParticleFlags
+
 
 
 def eval_spring_forces(model: Model, state: State) -> None:
@@ -28,3 +30,24 @@ def eval_spring_forces(model: Model, state: State) -> None:
 
         state.particle_f[i] += f_tot
         state.particle_f[j] -= f_tot
+
+def eval_wind_forces(
+        model: Model,
+        state: State,
+        wind_dir: np.ndarray = np.array([1.0, 0.0, 0.0]),
+        wind_strength: float = 2.0,
+) -> None:
+    """
+    Apply a constant wind force to all active particles.
+    """
+
+    norm = np.linalg.norm(wind_dir)
+    if norm < 1e-8:
+        return
+    wind_dir = wind_dir / norm
+
+    wind_force = wind_strength * wind_dir
+
+    for i in range(model.particle_count):
+        if model.particle_flags[i] & ParticleFlags.ACTIVE.value:
+            state.particle_f[i] += wind_force
