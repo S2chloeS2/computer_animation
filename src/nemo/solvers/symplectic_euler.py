@@ -4,6 +4,8 @@ from ..sim.forces import eval_spring_forces
 from ..sim.model import Model
 from ..sim.state import State
 from .solver import SolverBase
+from ..sim.forces import eval_wind_forces
+
 
 
 class SymplecticEulerSolver(SolverBase):
@@ -35,7 +37,17 @@ class SymplecticEulerSolver(SolverBase):
                         model.particle_mass[i] * model.gravity
                 )
 
-        # 4. Symplectic Euler integration
+        # # ✅ 3.5 wind force
+        # eval_wind_forces(
+        #     model,
+        #     state_in,
+        #     wind_dir=[1.0, 0.0, 0.0],
+        #     wind_strength=2.0,
+        # )
+
+
+
+# 4. Symplectic Euler integration
         for i in range(model.particle_count):
 
             if model.particle_flags[i] & ParticleFlags.ACTIVE.value == 0:
