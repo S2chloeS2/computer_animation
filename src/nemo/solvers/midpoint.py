@@ -44,11 +44,71 @@ class MidpointSolver(SolverBase):
         # HINT: for midpoint method, you need to call eval_spring_forces twice. Once to evaluate force
         # at t0, another time to evalute force at x_0 + h/2 f(x_0), as discussed in the class
 
+        model = self.model
 
-        # NOTE: The following code are dummy code. They are NOT a part of the implementation.
-        #       They are here just to ensure the starter code can be run and the viewer can be launched.
-        #       When you finish your PA, PLEASE remove the next three lines of code
-        for ii in range(self.model.particle_count):
-            state_out.particle_q[ii] = state_in.particle_q[ii]
-            state_out.particle_qd[ii] = state_in.particle_qd[ii]
+        # =========================
+        # 1. Force at t_n
+        # =========================
+        state_in.clear_forces()
+        eval_spring_forces(model, state_in)
 
+        for i in range(model.particle_count):
+            if model.particle_flags[i] & ParticleFlags.ACTIVE.value:
+                state_in.particle_f[i] += model.particle_mass[i] * model.gravity
+
+        # =========================
+        # 2. Build midpoint state (reuse state_out as buffer)
+        # =========================
+        for i in range(model.particle_count):
+
+            if model.particle_flags[i] & ParticleFlags.ACTIVE.value == 0:
+                state_out.particle_q[i]  = state_in.particle_q[i]
+                state_out.particle_qd[i] = state_in.particle_qd[i]
+                continue
+
+            inv_m = model.particle_inv_mass[i]
+
+            # v_{n+1/2}
+            v_half = (
+                    state_in.particle_qd[i]
+                    + 0.5 * dt * inv_m * state_in.particle_f[i]
+            )
+
+            # x_{n+1/2}
+            x_half = (
+                    state_in.particle_q[i]
+                    + 0.5 * dt * state_in.particle_qd[i]
+            )
+
+            state_out.particle_q[i]  = x_half
+            state_out.particle_qd[i] = v_half
+
+        # =========================
+        # 3. Force at midpoint
+        # =========================
+        state_out.clear_forces()
+        eval_spring_forces(model, state_out)
+
+        for i in range(model.particle_count):
+            if model.particle_flags[i] & ParticleFlags.ACTIVE.value:
+                state_out.particle_f[i] += model.particle_mass[i] * model.gravity
+
+        # =========================
+        # 4. Final update
+        # =========================
+        for i in range(model.particle_count):
+
+            if model.particle_flags[i] & ParticleFlags.ACTIVE.value == 0:
+                continue
+
+            inv_m = model.particle_inv_mass[i]
+
+            state_out.particle_qd[i] = (
+                    state_in.particle_qd[i]
+                    + dt * inv_m * state_out.particle_f[i]
+            )
+
+            state_out.particle_q[i] = (
+                    state_in.particle_q[i]
+                    + dt * state_out.particle_qd[i]
+            )
