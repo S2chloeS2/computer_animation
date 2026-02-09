@@ -6,6 +6,7 @@ from ..sim.state import State
 from .solver import SolverBase
 
 
+
 class ExplicitEulerSolver(SolverBase):
     """Explicit Euler time integrator.
 
@@ -17,38 +18,43 @@ class ExplicitEulerSolver(SolverBase):
 
     @override
     def step(self, state_in: State, state_out: State, dt: float | None = None):
-        """
-        Simulate the model for a given time step using Expelict Euler integrator.
 
-        Args:
-            state_in (State): The input state.
-            state_out (State): The output state.
-            dt (float): The time step (typically in seconds).
-
-        NOTE:
-            When dt is None, this step call will use the default timestep size
-            stored in self.dt. Otherwise, the given dt will be used.
-        """
-        # increase simulated time
         if dt is None:
             dt = self.dt
         self.ts += dt
 
-        eval_spring_forces(self.model, state_in)
+        model = self.model
 
-        # Implement your explicit euler algorithm here.
-        # At the high-level, it will be a for loop through all particles:
-        #  for i in range(self.model.particle_count):
-        #    ... advance the position (in particle_q) and velocity (in particle_qd) of particle i
-        #
-        # The updated particle positions and velocities are stored in `state_out.particle_q` and `state_out.particle_qd`
-        #
-        # HINT: the inverse of mass is already computed and stored in self.model.particle_inv_mass
+        # 1. clear forces
+        state_in.clear_forces()
 
+        # 2. spring forces
+        eval_spring_forces(model, state_in)
 
-        # NOTE: The following code are dummy code. They are NOT a part of the implementation.
-        #       They are here just to ensure the starter code can be run and the viewer can be launched.
-        #       When you finish your PA, PLEASE remove the next three lines of code
-        for ii in range(self.model.particle_count):
-            state_out.particle_q[ii] = state_in.particle_q[ii]
-            state_out.particle_qd[ii] = state_in.particle_qd[ii]
+        # 3. gravity (과제 요구사항)
+        for i in range(model.particle_count):
+            if model.particle_flags[i] & ParticleFlags.ACTIVE.value:
+                state_in.particle_f[i] += model.particle_mass[i] * model.gravity
+
+        # 4. Explicit Euler integration
+        for i in range(model.particle_count):
+
+            if model.particle_flags[i] & ParticleFlags.ACTIVE.value == 0:
+                state_out.particle_q[i]  = state_in.particle_q[i]
+                state_out.particle_qd[i] = state_in.particle_qd[i]
+                continue
+
+            inv_m = model.particle_inv_mass[i]
+
+            # v_{n+1}
+            state_out.particle_qd[i] = (
+                    state_in.particle_qd[i]
+                    + dt * inv_m * state_in.particle_f[i]
+            )
+
+            # q_{n+1} = q_n + dt * v_n  (Explicit!)
+            state_out.particle_q[i] = (
+                    state_in.particle_q[i]
+                    + dt * state_in.particle_qd[i]
+            )
+
