@@ -33,7 +33,7 @@ class ExplicitEulerSolver(SolverBase):
         eval_spring_forces(model, state_in)
 
 
-        # 3.5 wind force (bonus, conditional)
+        # 3.5 wind force (bonus)
         if hasattr(self, "wind_dir") and self.wind_dir is not None:
             eval_wind_forces(
                 model,
@@ -41,7 +41,7 @@ class ExplicitEulerSolver(SolverBase):
                 wind_dir=self.wind_dir,
                 wind_strength=self.wind_strength,
             )
-        # 3. gravity (과제 요구사항)
+        # 3. gravity
         for i in range(model.particle_count):
             if model.particle_flags[i] & ParticleFlags.ACTIVE.value:
                 state_in.particle_f[i] += model.particle_mass[i] * model.gravity

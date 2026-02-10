@@ -59,6 +59,16 @@ def load_scene(config: str) -> tuple[Model, SolverBase, PlotSpec | None]:
     else:
         raise RuntimeError(f"Unknown solver type: [{sconfig['type']}]")
 
+    # --- wind config (optional, for bonus) ---
+    wind_cfg = config_data.get("wind", None)
+    # attach wind info to solver (if exists)
+    if wind_cfg is not None:
+        solver.wind_dir = wind_cfg.get("direction", [1.0, 0.0, 0.0])
+        solver.wind_strength = float(wind_cfg.get("strength", 1.0))
+    else:
+        solver.wind_dir = None
+        solver.wind_strength = 0.0
+
     if "plot" in config_data:
         plot = PlotSpec(config_data["plot"])
         if plot.particle_id >= model.particle_count:
@@ -70,3 +80,5 @@ def load_scene(config: str) -> tuple[Model, SolverBase, PlotSpec | None]:
         return model, solver, plot
     else:
         return model, solver, None
+
+

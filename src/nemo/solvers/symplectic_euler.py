@@ -30,7 +30,7 @@ class SymplecticEulerSolver(SolverBase):
         # 2. spring forces
         eval_spring_forces(model, state_in)
 
-        # 3. gravity force (🔥 Explicit과 동일 🔥)
+        # 3. gravity force
         for i in range(model.particle_count):
             if model.particle_flags[i] & ParticleFlags.ACTIVE.value:
                 state_in.particle_f[i] += (

@@ -1,5 +1,5 @@
 solver:
-  type: symplectic_euler
+  type: midpoint
   timestep: 0.0005
 particles:
 - mass: 0.1

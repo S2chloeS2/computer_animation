@@ -47,3 +47,27 @@ The major steps of launch a simulation is as follows:
 4. In each timestep, detect collisions and advance the state using the solver.
 
 For example, for PA1, a model and a solver are created in `assignments.pa1.load_scene`, and the timestepping happens in the while loop in `assignments.run.Runner.launch` method.
+
+
+
+## Bonus Extension: Constant Wind Force
+
+I implemented a simple constant wind force as a bonus extension.
+
+### Description
+- A constant wind force is applied to all active particles.
+- The wind direction and strength are configurable through a scene file.
+- The wind force is applied **only when the scene includes a `wind` field**.
+- Default scenes provided for PA1 are **not affected**.
+
+### Modified / Added Files
+- `src/nemo/sim/forces.py`
+    - Added `eval_wind_forces()` function
+- `src/nemo/solvers/symplectic_euler.py`
+    - Conditionally applies wind force when wind parameters are present
+- `scenes/pa1/scene01_wind.yml`
+    - A custom scene to demonstrate the wind effect
+
+### How to Run the Bonus Scene
+```bash
+python -m assignments.run pa1 scenes/pa1/scene01_wind.yml

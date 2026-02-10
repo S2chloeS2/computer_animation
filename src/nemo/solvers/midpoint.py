@@ -35,21 +35,9 @@ class MidpointSolver(SolverBase):
             dt = self.dt
         self.ts += dt
 
-        # Implement your midpoint integrator algorithm here.
-        # At the high-level, it will be a for loop through all particles:
-        #  for i in range(self.model.particle_count):
-        #    ... advance the position (in particle_q) and velocity (in particle_qd) of particle i
-        #
-        # The updated particle positions and velocities are stored in `state_out.particle_q` and `state_out.particle_qd`
-        #
-        # HINT: for midpoint method, you need to call eval_spring_forces twice. Once to evaluate force
-        # at t0, another time to evalute force at x_0 + h/2 f(x_0), as discussed in the class
-
         model = self.model
 
-        # =========================
         # 1. Force at t_n
-        # =========================
         state_in.clear_forces()
         eval_spring_forces(model, state_in)
 
@@ -57,9 +45,9 @@ class MidpointSolver(SolverBase):
             if model.particle_flags[i] & ParticleFlags.ACTIVE.value:
                 state_in.particle_f[i] += model.particle_mass[i] * model.gravity
 
-        # =========================
+
         # 2. Build midpoint state (reuse state_out as buffer)
-        # =========================
+
         for i in range(model.particle_count):
 
             if model.particle_flags[i] & ParticleFlags.ACTIVE.value == 0:
@@ -84,9 +72,9 @@ class MidpointSolver(SolverBase):
             state_out.particle_q[i]  = x_half
             state_out.particle_qd[i] = v_half
 
-        # =========================
+
         # 3. Force at midpoint
-        # =========================
+
         state_out.clear_forces()
         eval_spring_forces(model, state_out)
 
@@ -103,9 +91,9 @@ class MidpointSolver(SolverBase):
                 wind_dir=self.wind_dir,
                 wind_strength=self.wind_strength,
             )
-        # =========================
+
         # 4. Final update
-        # =========================
+
         for i in range(model.particle_count):
 
             if model.particle_flags[i] & ParticleFlags.ACTIVE.value == 0:
