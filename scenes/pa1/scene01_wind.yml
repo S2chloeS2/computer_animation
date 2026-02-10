@@ -3,7 +3,7 @@ solver:
   # - explicit_euler
   # - symplectic_euler
   # - midpoint
-  type: symplectic_euler   # symplectic_euler # explicit_euler
+  type: midpoint # symplectic_euler # explicit_euler
   timestep: 0.0005   # timestep size
 
 wind:
