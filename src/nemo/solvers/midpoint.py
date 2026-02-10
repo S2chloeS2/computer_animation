@@ -4,6 +4,7 @@ from ..sim.forces import eval_spring_forces
 from ..sim.model import Model
 from ..sim.state import State
 from .solver import SolverBase
+from ..sim.forces import eval_wind_forces
 
 
 class MidpointSolver(SolverBase):
@@ -93,6 +94,15 @@ class MidpointSolver(SolverBase):
             if model.particle_flags[i] & ParticleFlags.ACTIVE.value:
                 state_out.particle_f[i] += model.particle_mass[i] * model.gravity
 
+
+        # 3.5 wind force (bonus)
+        if hasattr(self, "wind_dir") and self.wind_dir is not None:
+            eval_wind_forces(
+                model,
+                state_out,   # midpoint state
+                wind_dir=self.wind_dir,
+                wind_strength=self.wind_strength,
+            )
         # =========================
         # 4. Final update
         # =========================

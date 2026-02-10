@@ -4,6 +4,7 @@ from ..sim.forces import eval_spring_forces
 from ..sim.model import Model
 from ..sim.state import State
 from .solver import SolverBase
+from ..sim.forces import eval_wind_forces
 
 
 
@@ -31,10 +32,20 @@ class ExplicitEulerSolver(SolverBase):
         # 2. spring forces
         eval_spring_forces(model, state_in)
 
+
+        # 3.5 wind force (bonus, conditional)
+        if hasattr(self, "wind_dir") and self.wind_dir is not None:
+            eval_wind_forces(
+                model,
+                state_in,
+                wind_dir=self.wind_dir,
+                wind_strength=self.wind_strength,
+            )
         # 3. gravity (과제 요구사항)
         for i in range(model.particle_count):
             if model.particle_flags[i] & ParticleFlags.ACTIVE.value:
                 state_in.particle_f[i] += model.particle_mass[i] * model.gravity
+
 
         # 4. Explicit Euler integration
         for i in range(model.particle_count):
