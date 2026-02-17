@@ -1,0 +1,67 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "nemo"
+dynamic = ["version"]
+authors = [{ name = "Changxi Zheng", email = "cxz@cs.columbia.edu" }]
+readme = "README.md"
+requires-python = ">=3.12"
+
+dependencies = [
+    "polyscope>=2.5",
+    "numpy>=2.3.0",
+    "typer",
+    "rich",
+    "PyYAML",
+]
+
+[tool.hatch.version]
+path = "src/nemo/_version.py"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.uv]
+default-groups = ["dev"]
+
+[dependency-groups]
+test = [ "pytest >= 8.4.0" ]
+lint = ["ruff", "mypy", "tox-uv>=1.25.0"]
+dev = [  
+    {include-group = "lint"},
+    {include-group = "test"}
+]
+
+## [tool.hatch.build.targets.wheel]
+## include = ["src/nemo"]
+
+[tool.ruff]
+cache-dir = ".cache/ruff"
+line-length = 120
+indent-width = 4
+exclude = [".venv"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "I",   # isort
+    "F",   # pyflakes
+    "W",   # pycodestyle warnings
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "NPY", # NumPy-specific rules
+    "PLC", # pylint convention
+    "PLE", # pylint error
+    "PLW", # pylint warning
+    "UP",  # pyupgrade
+    "RUF", # ruff-specific rules
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.mypy]
+warn_return_any = true
+# disallow_untyped_defs = true

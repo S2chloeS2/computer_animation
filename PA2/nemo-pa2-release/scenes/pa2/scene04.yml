@@ -1,0 +1,42 @@
+solver:
+  type: implicit_euler 
+  #type: linearized_implicit # integrator type
+  timestep: 0.001   # timestep size
+
+
+# A list of particles added explicitly
+particles:
+  # 1st particle
+  - pos: [0, 0, 3.8] 
+    vel: [0, 0, 0]  # optional (default (0, 0, 0))
+    fixed: true     # optional (default flase)
+    mass: 0.1
+
+  # 2nd particle
+  - pos: [0, 1, 2.8] 
+    vel: [0, 0, 0]
+    fixed: false
+    radius: 0.1     # optional
+    mass: 0.2
+
+  - pos: [0, 1.5, 1.8] 
+    vel: [0, 0, 0]
+    fixed: false
+    radius: 0.1     # optional
+    mass: 0.2
+
+springs:
+  # 1st spring
+  - particle_ids: [0, 1]
+    stiffness: 12.
+    #damping: 0.01   # optional
+    #rest_length: 0.4 # optional
+
+  - particle_ids: [2, 1]
+    stiffness: 12.
+    #damping: 0.01   # optional
+    #rest_length: 0.4 # optional
+
+gravitational:
+  - particle_ids: [0, 1]
+    G: 200.  # Newton's constant for gravitational force

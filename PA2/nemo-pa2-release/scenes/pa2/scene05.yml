@@ -1,0 +1,38 @@
+solver:
+  type: linearized_implicit #symplectic_euler #explicit_euler # integrator type
+  timestep: 0.005   # timestep size
+
+
+# A list of particles added explicitly
+particles:
+  # 1st particle
+  - pos: [0, 0, 2] 
+    vel: [0, 0, 0]  # optional (default (0, 0, 0))
+    fixed: true     # optional (default flase)
+    mass: 0.1
+
+  # 2nd particle
+  - pos: [0, 1, 1] 
+    vel: [0, 0, 0]
+    fixed: false
+    radius: 0.2     # optional
+    mass: 0.2
+
+
+springs:
+  # 1st spring
+  - particle_ids: [0, 1]
+    stiffness: 12.
+    #damping: 0.01   # optional
+    #rest_length: 0.4 # optional
+
+
+# What DOF of a particle over time to plot 
+# This section is optional. If omitted, nothing will be plot.
+plot:
+  particle_id: 1
+  # which DoF to plot. For exmaple, DoF=0 will plot x-component of the particle position;
+  # DoF=2, will plot z-component of the particle position
+  # NOTE: We don't support the plot of velocity yet
+  dof: 2
+  y_range: [0.2, 1.0]

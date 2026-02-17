@@ -1,0 +1,47 @@
+solver:
+  # integrator type. Choose from
+  # - explicit_euler
+  # - symplectic_euler
+  # - midpoint
+  # - linearized_implicit
+  type: symplectic_euler # midpoint
+  timestep: 0.005   # timestep size
+
+# What DOF of a particle over time to plot 
+# This section is optional. If omitted, nothing will be plot.
+plot:
+  particle_id: 1
+  # which DoF to plot. For exmaple, DoF=0 will plot x-component of the particle position;
+  # DoF=2, will plot z-component of the particle position
+  # NOTE: We don't support the plot of velocity yet
+  dof: 2
+  # y_range specifies the plot's y-axis range (lower and upper values)
+  y_range: [0.7, 1.2]
+
+# A list of particles added explicitly
+particles:
+  # 1st particle
+  - pos: [0, 0, 2] 
+    vel: [0, 0, 0]  # optional (default (0, 0, 0))
+    fixed: true     # optional (default flase)
+    mass: 0.1
+
+  # 2nd particle
+  - pos: [0, 0, 1] 
+    vel: [0, 0, 0]
+    fixed: false
+    radius: 0.2     # optional
+    mass: 0.2
+    drag: 0.1  # optional. Enable Drag force
+
+
+springs:
+  # 1st spring
+  # particle_ids are a pair of Ids indidcating which particles this spring
+  # connects to. The Ids are zero-based (the first particle listed above has
+  # an ID=0).
+  - particle_ids: [0, 1]
+    stiffness: 20.
+    damping: 0.0   # optional
+    #rest_length: 0.4 # optional
+

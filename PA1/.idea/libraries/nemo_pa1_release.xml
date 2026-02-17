@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="nemo-pa1-release">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/nemo-pa1-release.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

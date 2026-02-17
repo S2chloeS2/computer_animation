@@ -1,0 +1,3278 @@
+solver:
+  type: midpoint
+  timestep: 0.0005
+particles:
+- mass: 0.1
+  vel: &id001
+  - 0
+  - 0
+  - 0
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.0
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.005
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.01
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.015
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.02
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.025
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.03
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.035
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.04
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.045
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.05
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.055
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.06
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.065
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.07
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.075
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.08
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.085
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.09
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.0
+  - 0.095
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.0
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.005
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.01
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.015
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.02
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.025
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.03
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.035
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.04
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.045
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.05
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.055
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.06
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.065
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.07
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.075
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.08
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.085
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.09
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.005
+  - 0.095
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.0
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.005
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.01
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.015
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.02
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.025
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.03
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.035
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.04
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.045
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.05
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.055
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.06
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.065
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.07
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.075
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.08
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.085
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.09
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.01
+  - 0.095
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.0
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.005
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.01
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.015
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.02
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.025
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.03
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.035
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.04
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.045
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.05
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.055
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.06
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.065
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.07
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.075
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.08
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.085
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.09
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.015
+  - 0.095
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.0
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.005
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.01
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.015
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.02
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.025
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.03
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.035
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.04
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.045
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.05
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.055
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.06
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.065
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.07
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.075
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.08
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.085
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.09
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.02
+  - 0.095
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.0
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.005
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.01
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.015
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.02
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.025
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.03
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.035
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.04
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.045
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.05
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.055
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.06
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.065
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.07
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.075
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.08
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.085
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.09
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.025
+  - 0.095
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.0
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.005
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.01
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.015
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.02
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.025
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.03
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.035
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.04
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.045
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.05
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.055
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.06
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.065
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.07
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.075
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.08
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.085
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.09
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.03
+  - 0.095
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.0
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.005
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.01
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.015
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.02
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.025
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.03
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.035
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.04
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.045
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.05
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.055
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.06
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.065
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.07
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.075
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.08
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.085
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.09
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.035
+  - 0.095
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.0
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.005
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.01
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.015
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.02
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.025
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.03
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.035
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.04
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.045
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.05
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.055
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.06
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.065
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.07
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.075
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.08
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.085
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.09
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.04
+  - 0.095
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.0
+  - 4
+  fixed: true
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.005
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.01
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.015
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.02
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.025
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.03
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.035
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.04
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.045
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.05
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.055
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.06
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.065
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.07
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.075
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.08
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.085
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.09
+  - 4
+- mass: 0.1
+  vel: *id001
+  radius: 0.01
+  pos:
+  - 0.045
+  - 0.095
+  - 4
+  fixed: true
+springs:
+- particle_ids:
+  - 0
+  - 1
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 1
+  - 2
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 2
+  - 3
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 3
+  - 4
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 4
+  - 5
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 5
+  - 6
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 6
+  - 7
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 7
+  - 8
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 8
+  - 9
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 9
+  - 10
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 10
+  - 11
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 11
+  - 12
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 12
+  - 13
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 13
+  - 14
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 14
+  - 15
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 15
+  - 16
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 16
+  - 17
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 17
+  - 18
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 18
+  - 19
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 0
+  - 20
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 20
+  - 21
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 1
+  - 21
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 21
+  - 22
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 2
+  - 22
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 22
+  - 23
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 3
+  - 23
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 23
+  - 24
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 4
+  - 24
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 24
+  - 25
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 5
+  - 25
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 25
+  - 26
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 6
+  - 26
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 26
+  - 27
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 7
+  - 27
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 27
+  - 28
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 8
+  - 28
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 28
+  - 29
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 9
+  - 29
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 29
+  - 30
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 10
+  - 30
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 30
+  - 31
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 11
+  - 31
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 31
+  - 32
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 12
+  - 32
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 32
+  - 33
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 13
+  - 33
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 33
+  - 34
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 14
+  - 34
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 34
+  - 35
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 15
+  - 35
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 35
+  - 36
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 16
+  - 36
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 36
+  - 37
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 17
+  - 37
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 37
+  - 38
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 18
+  - 38
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 38
+  - 39
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 19
+  - 39
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 20
+  - 40
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 40
+  - 41
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 21
+  - 41
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 41
+  - 42
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 22
+  - 42
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 42
+  - 43
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 23
+  - 43
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 43
+  - 44
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 24
+  - 44
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 44
+  - 45
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 25
+  - 45
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 45
+  - 46
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 26
+  - 46
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 46
+  - 47
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 27
+  - 47
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 47
+  - 48
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 28
+  - 48
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 48
+  - 49
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 29
+  - 49
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 49
+  - 50
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 30
+  - 50
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 50
+  - 51
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 31
+  - 51
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 51
+  - 52
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 32
+  - 52
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 52
+  - 53
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 33
+  - 53
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 53
+  - 54
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 34
+  - 54
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 54
+  - 55
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 35
+  - 55
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 55
+  - 56
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 36
+  - 56
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 56
+  - 57
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 37
+  - 57
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 57
+  - 58
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 38
+  - 58
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 58
+  - 59
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 39
+  - 59
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 40
+  - 60
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 60
+  - 61
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 41
+  - 61
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 61
+  - 62
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 42
+  - 62
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 62
+  - 63
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 43
+  - 63
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 63
+  - 64
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 44
+  - 64
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 64
+  - 65
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 45
+  - 65
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 65
+  - 66
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 46
+  - 66
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 66
+  - 67
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 47
+  - 67
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 67
+  - 68
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 48
+  - 68
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 68
+  - 69
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 49
+  - 69
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 69
+  - 70
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 50
+  - 70
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 70
+  - 71
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 51
+  - 71
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 71
+  - 72
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 52
+  - 72
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 72
+  - 73
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 53
+  - 73
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 73
+  - 74
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 54
+  - 74
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 74
+  - 75
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 55
+  - 75
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 75
+  - 76
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 56
+  - 76
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 76
+  - 77
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 57
+  - 77
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 77
+  - 78
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 58
+  - 78
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 78
+  - 79
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 59
+  - 79
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 60
+  - 80
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 80
+  - 81
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 61
+  - 81
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 81
+  - 82
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 62
+  - 82
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 82
+  - 83
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 63
+  - 83
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 83
+  - 84
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 64
+  - 84
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 84
+  - 85
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 65
+  - 85
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 85
+  - 86
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 66
+  - 86
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 86
+  - 87
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 67
+  - 87
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 87
+  - 88
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 68
+  - 88
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 88
+  - 89
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 69
+  - 89
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 89
+  - 90
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 70
+  - 90
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 90
+  - 91
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 71
+  - 91
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 91
+  - 92
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 72
+  - 92
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 92
+  - 93
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 73
+  - 93
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 93
+  - 94
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 74
+  - 94
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 94
+  - 95
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 75
+  - 95
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 95
+  - 96
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 76
+  - 96
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 96
+  - 97
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 77
+  - 97
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 97
+  - 98
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 78
+  - 98
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 98
+  - 99
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 79
+  - 99
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 80
+  - 100
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 100
+  - 101
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 81
+  - 101
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 101
+  - 102
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 82
+  - 102
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 102
+  - 103
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 83
+  - 103
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 103
+  - 104
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 84
+  - 104
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 104
+  - 105
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 85
+  - 105
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 105
+  - 106
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 86
+  - 106
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 106
+  - 107
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 87
+  - 107
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 107
+  - 108
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 88
+  - 108
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 108
+  - 109
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 89
+  - 109
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 109
+  - 110
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 90
+  - 110
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 110
+  - 111
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 91
+  - 111
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 111
+  - 112
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 92
+  - 112
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 112
+  - 113
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 93
+  - 113
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 113
+  - 114
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 94
+  - 114
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 114
+  - 115
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 95
+  - 115
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 115
+  - 116
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 96
+  - 116
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 116
+  - 117
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 97
+  - 117
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 117
+  - 118
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 98
+  - 118
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 118
+  - 119
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 99
+  - 119
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 100
+  - 120
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 120
+  - 121
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 101
+  - 121
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 121
+  - 122
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 102
+  - 122
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 122
+  - 123
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 103
+  - 123
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 123
+  - 124
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 104
+  - 124
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 124
+  - 125
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 105
+  - 125
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 125
+  - 126
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 106
+  - 126
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 126
+  - 127
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 107
+  - 127
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 127
+  - 128
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 108
+  - 128
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 128
+  - 129
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 109
+  - 129
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 129
+  - 130
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 110
+  - 130
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 130
+  - 131
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 111
+  - 131
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 131
+  - 132
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 112
+  - 132
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 132
+  - 133
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 113
+  - 133
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 133
+  - 134
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 114
+  - 134
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 134
+  - 135
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 115
+  - 135
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 135
+  - 136
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 116
+  - 136
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 136
+  - 137
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 117
+  - 137
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 137
+  - 138
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 118
+  - 138
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 138
+  - 139
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 119
+  - 139
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 120
+  - 140
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 140
+  - 141
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 121
+  - 141
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 141
+  - 142
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 122
+  - 142
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 142
+  - 143
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 123
+  - 143
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 143
+  - 144
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 124
+  - 144
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 144
+  - 145
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 125
+  - 145
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 145
+  - 146
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 126
+  - 146
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 146
+  - 147
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 127
+  - 147
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 147
+  - 148
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 128
+  - 148
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 148
+  - 149
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 129
+  - 149
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 149
+  - 150
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 130
+  - 150
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 150
+  - 151
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 131
+  - 151
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 151
+  - 152
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 132
+  - 152
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 152
+  - 153
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 133
+  - 153
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 153
+  - 154
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 134
+  - 154
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 154
+  - 155
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 135
+  - 155
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 155
+  - 156
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 136
+  - 156
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 156
+  - 157
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 137
+  - 157
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 157
+  - 158
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 138
+  - 158
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 158
+  - 159
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 139
+  - 159
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 140
+  - 160
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 160
+  - 161
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 141
+  - 161
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 161
+  - 162
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 142
+  - 162
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 162
+  - 163
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 143
+  - 163
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 163
+  - 164
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 144
+  - 164
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 164
+  - 165
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 145
+  - 165
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 165
+  - 166
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 146
+  - 166
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 166
+  - 167
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 147
+  - 167
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 167
+  - 168
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 148
+  - 168
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 168
+  - 169
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 149
+  - 169
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 169
+  - 170
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 150
+  - 170
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 170
+  - 171
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 151
+  - 171
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 171
+  - 172
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 152
+  - 172
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 172
+  - 173
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 153
+  - 173
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 173
+  - 174
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 154
+  - 174
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 174
+  - 175
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 155
+  - 175
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 175
+  - 176
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 156
+  - 176
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 176
+  - 177
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 157
+  - 177
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 177
+  - 178
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 158
+  - 178
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 178
+  - 179
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 159
+  - 179
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 160
+  - 180
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 180
+  - 181
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 161
+  - 181
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 181
+  - 182
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 162
+  - 182
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 182
+  - 183
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 163
+  - 183
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 183
+  - 184
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 164
+  - 184
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 184
+  - 185
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 165
+  - 185
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 185
+  - 186
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 166
+  - 186
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 186
+  - 187
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 167
+  - 187
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 187
+  - 188
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 168
+  - 188
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 188
+  - 189
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 169
+  - 189
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 189
+  - 190
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 170
+  - 190
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 190
+  - 191
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 171
+  - 191
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 191
+  - 192
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 172
+  - 192
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 192
+  - 193
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 173
+  - 193
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 193
+  - 194
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 174
+  - 194
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 194
+  - 195
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 175
+  - 195
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 195
+  - 196
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 176
+  - 196
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 196
+  - 197
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 177
+  - 197
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 197
+  - 198
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 178
+  - 198
+  stiffness: 300.0
+  damping: 0.1
+- particle_ids:
+  - 198
+  - 199
+  stiffness: 3500.0
+  damping: 1.8
+- particle_ids:
+  - 179
+  - 199
+  stiffness: 300.0
+  damping: 0.1

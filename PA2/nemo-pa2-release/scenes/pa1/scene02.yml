@@ -1,0 +1,28 @@
+solver:
+  type: explicit_euler # integrator type
+  timestep: 0.0005   # timestep size
+
+
+# A list of particles added explicitly
+particles:
+  # 1st particle
+  - pos: [0, 0, 2] 
+    vel: [0, 0, 0]  # optional (default (0, 0, 0))
+    fixed: true     # optional (default flase)
+    mass: 0.1
+
+  # 2nd particle
+  - pos: [0, 0, 1] 
+    vel: [0, 0, 0]
+    fixed: false
+    radius: 0.2     # optional
+    mass: 0.2
+
+
+springs:
+  # 1st spring
+  - particle_ids: [0, 1]
+    stiffness: 10.
+    damping: 0.2   # optional
+    #rest_length: 0.4 # optional
+

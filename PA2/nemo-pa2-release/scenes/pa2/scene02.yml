@@ -1,0 +1,55 @@
+solver:
+  # integrator type. Choose from
+  # - explicit_euler
+  # - symplectic_euler
+  # - midpoint
+  # - linearized_implicit
+  type: linearized_implicit # midpoint
+  timestep: 0.0001   # timestep size
+  gravity: 0.0
+
+# What DOF of a particle over time to plot 
+# This section is optional. If omitted, nothing will be plot.
+plot:
+  particle_id: 1
+  # which DoF to plot. For exmaple, DoF=0 will plot x-component of the particle position;
+  # DoF=2, will plot z-component of the particle position
+  # NOTE: We don't support the plot of velocity yet
+  dof: 2
+  # y_range specifies the plot's y-axis range (lower and upper values)
+  y_range: [1.0, 2.8]
+
+# A list of particles added explicitly
+particles:
+  # 1st particle
+  - pos: [0, 0, 2] 
+    vel: [0, 0, 0]  # optional (default (0, 0, 0))
+    fixed: true     # optional (default flase)
+    mass: 1.2
+
+  # 2nd particle
+  - pos: [-1, 0, 1.8] 
+    vel: [0, 0, -3]
+    radius: 0.1     # optional
+    mass: 0.2
+
+  # 2nd particle
+  - pos: [-1, 0, 0.8] 
+    vel: [0, 0, -3]
+    radius: 0.1     # optional
+    mass: 0.2
+
+
+# A list of particle pairs, between which there will be gravitational force applied.
+# The gravitational force (see https://en.wikipedia.org/wiki/Gravity) is
+# defined in the course note.
+# Here each pair of particles may even experience different G (newton's constant)
+gravitational:
+  # The Ids are zero-based (the first particle listed above has an ID=0).
+  - particle_ids: [0, 1]
+    G: 20.  # Newton's constant for gravitational force
+  - particle_ids: [1, 2]
+    G: 10.  # Newton's constant for gravitational force
+  - particle_ids: [0, 2]
+    G: 10.  # Newton's constant for gravitational force
+

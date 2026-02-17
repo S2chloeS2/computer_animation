@@ -1,0 +1,67 @@
+solver:
+  type: symplectic_euler # explicit_euler # integrator type
+  timestep: 0.0005   # timestep size
+
+
+# A list of particles added explicitly
+particles:
+  # 1st particle
+  - pos: [0, 0, 3.8] 
+    vel: [0, 0, 0]  # optional (default (0, 0, 0))
+    fixed: true     # optional (default flase)
+    mass: 0.1
+
+  - pos: [0, 1, 3.8] 
+    vel: [0, 0, 0]  # optional (default (0, 0, 0))
+    fixed: true     # optional (default flase)
+    mass: 0.1
+
+  - pos: [1, 0.5, 3.8] 
+    vel: [0, 0, 0]
+    fixed: false
+    radius: 0.1     # optional
+    mass: 0.1
+
+  - pos: [1, -0.3, 3.8] 
+    vel: [0, 0, 0]
+    fixed: false
+    radius: 0.1     # optional
+    mass: 0.1
+
+  - pos: [1, 1.3, 3.8] 
+    vel: [0, 0, 0]
+    fixed: false
+    radius: 0.1     # optional
+    mass: 0.1
+
+springs:
+  # 1st spring
+  - particle_ids: [0, 2]
+    stiffness: 12.
+    damping: 0.01   # optional
+    #rest_length: 0.4 # optional
+
+  - particle_ids: [2, 1]
+    stiffness: 12.
+    damping: 0.01   # optional
+    #rest_length: 0.4 # optional
+
+  - particle_ids: [2, 3]
+    stiffness: 12.
+    damping: 0.01   # optional
+    #rest_length: 0.4 # optional
+
+  - particle_ids: [2, 4]
+    stiffness: 12.
+    damping: 0.01   # optional
+    #rest_length: 0.4 # optional
+
+  - particle_ids: [0, 3]
+    stiffness: 12.
+    damping: 0.01   # optional
+    #rest_length: 0.4 # optional
+
+  - particle_ids: [1, 4]
+    stiffness: 12.
+    damping: 0.01   # optional
+    #rest_length: 0.4 # optional
