@@ -31,13 +31,41 @@ class LinearizedImplicitSolver(SolverBase):
         if dt is None:
             dt = self.dt
         self.ts += dt
-        # TODO [4]: implement linearized implicit euler here
+        N = self.model.particle_count
 
-        # Implement your linearized implicit euler integrator algorithm here.
-        # You need to perform the following steps:
-        # 1. advance position only
-        # 2. evalue force at new position
-        # 3. solve the linear system
-        # 3.1 construct the linear system
-        # 3.2 solve the linear system
-        # 4. update the velocity and position
+        # Step 1: build tentative state at q* = qⁿ + h·q̇ⁿ, q̇ = q̇ⁿ
+        tmp_state = self.model.state()
+        tmp_state.particle_q  = state_in.particle_q  + dt * state_in.particle_qd
+        tmp_state.particle_qd = state_in.particle_qd.copy()
+
+        # Step 2: evaluate forces at (q*, q̇ⁿ)
+        tmp_state.clear_forces()
+        eval_all_forces(self.model, tmp_state)
+        # add gravity: F_grav[i] = mass[i] * gravity  (zero for fixed particles)
+        tmp_state.particle_f += np.outer(self.masked_mass, self.model.gravity)
+
+        # Step 3: construct linear system  A_mat · δq̇ = b
+        # A_mat = M - h²·∂F/∂q - h·∂F/∂q̇
+        A_mat = self.M.copy()
+        eval_all_force_pos_jacobians(self.model, tmp_state, A_mat, scale=-(dt**2))
+        eval_all_force_vel_jacobians(self.model, tmp_state, A_mat, scale=-dt)
+
+        # b = h · F(q*, q̇ⁿ)
+        b = dt * tmp_state.particle_f.reshape(-1)
+
+        # Step 3.1: enforce fixed particles — zero out their rows/cols, set diagonal to 1
+        for i in range(N):
+            if self.model.particle_flags[i] & ParticleFlags.ACTIVE.value == 0:
+                for d in range(3):
+                    idx = 3 * i + d
+                    A_mat[idx, :] = 0.0
+                    A_mat[:, idx] = 0.0
+                    A_mat[idx, idx] = 1.0
+                    b[idx] = 0.0
+
+        # Step 3.2: solve for δq̇
+        delta_qd = np.linalg.solve(A_mat, b)
+
+        # Step 4: update velocity and position
+        state_out.particle_qd = state_in.particle_qd + delta_qd.reshape(N, 3)
+        state_out.particle_q  = state_in.particle_q  + dt * state_out.particle_qd
