@@ -68,8 +68,7 @@ def eval_spring_force_pos_jacobians(model: Model, state: State, A: nparray, scal
             kd = model.spring_damping[s]
             dv = state.particle_qd[i] - state.particle_qd[j]
             ndotdv = np.dot(nhat, dv)
-            Pdv = (np.eye(3) - nnT) @ dv  # project dv onto plane perpendicular to nhat
-            K += -(kd / nrm) * (ndotdv * (np.eye(3) - nnT) + np.outer(nhat, Pdv))
+            K += -(kd / nrm) * (ndotdv * np.eye(3) + np.outer(nhat, dv) @ (np.eye(3) - nnT))
 
         i_active = model.particle_flags[i] & ParticleFlags.ACTIVE.value != 0
         j_active = model.particle_flags[j] & ParticleFlags.ACTIVE.value != 0
