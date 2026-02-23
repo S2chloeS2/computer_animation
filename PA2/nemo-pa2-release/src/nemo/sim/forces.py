@@ -155,8 +155,30 @@ def eval_gravitational_force_pos_jacobians(model: Model, state: State, A: nparra
         A: nparray, shape (particle_countx3, particle_countx3): output array for the jacobians
         scale: float: the scalar to scale the Jacobian before adding to A
     """
-    # TODO [2]: See course note about TODO [2]
-    pass
+    for g in range(model.gravitational_count):
+        i, j = model.gravitational_pairs[g]
+
+        dir = state.particle_q[i] - state.particle_q[j]
+        nrm = np.linalg.norm(dir)
+        if nrm < 1e-8:
+            continue
+
+        G = model.gravitational_constant[g]
+        nhat = dir / nrm
+        nnT = np.outer(nhat, nhat)
+
+        # K = -(G·m₀·m₁ / l³) · (I - 3·n̂n̂ᵀ)
+        K = -(G * model.particle_mass[i] * model.particle_mass[j] / nrm**3) * (np.eye(3) - 3 * nnT)
+
+        i_active = model.particle_flags[i] & ParticleFlags.ACTIVE.value != 0
+        j_active = model.particle_flags[j] & ParticleFlags.ACTIVE.value != 0
+
+        if i_active:
+            A[3*i:3*i+3, 3*i:3*i+3] += scale * K
+            A[3*i:3*i+3, 3*j:3*j+3] += scale * (-K)
+        if j_active:
+            A[3*j:3*j+3, 3*i:3*i+3] += scale * (-K)
+            A[3*j:3*j+3, 3*j:3*j+3] += scale * K
 
 
 def eval_drag_forces(model: Model, state: State) -> None:
