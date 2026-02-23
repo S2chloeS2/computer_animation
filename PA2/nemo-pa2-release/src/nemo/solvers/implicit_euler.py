@@ -35,16 +35,55 @@ class ImplicitEulerSolver(SolverBase):
         if dt is None:
             dt = self.dt
         self.ts += dt
-        # TODO [4]: implement linearized implicit euler here
+        N = self.model.particle_count
+
+        # precompute fixed-DOF indices once
+        fixed_dofs = [
+            3 * i + d
+            for i in range(N)
+            if self.model.particle_flags[i] & ParticleFlags.ACTIVE.value == 0
+            for d in range(3)
+        ]
+
+        # initial guess: v₀ = q̇ⁿ
+        v = state_in.particle_qd.copy()   # shape (N, 3)
 
         # Newton iteration starts here. Iterate at most self.maxits times
-        # You may want to refer to the pseudo code here:
-        # https://en.wikipedia.org/wiki/Newton%27s_method
-
         for _ in range(self.maxits):
-            # A newton iteration to adjust velocity
-            # - evalue force at new position
-            # - solve the linear system
-            # - update the velocity and position
-            # check for convergence
-            pass
+            # q* = qⁿ + h·vᵢ
+            tmp_state = self.model.state()
+            tmp_state.particle_q  = state_in.particle_q + dt * v
+            tmp_state.particle_qd = v.copy()
+
+            # evaluate F(q*, vᵢ) including gravity
+            tmp_state.clear_forces()
+            eval_all_forces(self.model, tmp_state)
+            tmp_state.particle_f += np.outer(self.masked_mass, self.model.gravity)
+
+            # build Jacobian of R:  A_mat = M - h²·∂F/∂q - h·∂F/∂q̇
+            A_mat = self.M.copy()
+            eval_all_force_pos_jacobians(self.model, tmp_state, A_mat, scale=-(dt**2))
+            eval_all_force_vel_jacobians(self.model, tmp_state, A_mat, scale=-dt)
+
+            # rhs = -R(vᵢ) = -M(vᵢ - q̇ⁿ) + h·F
+            Mv_diff = self.M @ (v - state_in.particle_qd).reshape(-1)
+            b = -Mv_diff + dt * tmp_state.particle_f.reshape(-1)
+
+            # enforce fixed particles
+            for idx in fixed_dofs:
+                A_mat[idx, :] = 0.0
+                A_mat[:, idx] = 0.0
+                A_mat[idx, idx] = 1.0
+                b[idx] = 0.0
+
+            # solve for δv and update
+            delta_v = np.linalg.solve(A_mat, b)
+            v = v + delta_v.reshape(N, 3)
+
+            # check for convergence: ‖δv‖ < tol
+            if np.linalg.norm(delta_v) < self.tol:
+                break
+
+        # write final state
+        state_out.particle_qd = v
+        state_out.particle_q  = state_in.particle_q + dt * v
