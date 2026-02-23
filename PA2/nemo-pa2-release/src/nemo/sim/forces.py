@@ -95,8 +95,30 @@ def eval_spring_force_vel_jacobians(model: Model, state: State, A: nparray, scal
         A: nparray, shape (particle_countx3, particle_countx3): output array for the jacobians
         scale: float: the scalar to scale the Jacobian before adding to A
     """
-    # TODO [1]: See course note about TODO [1]
-    pass
+    for s in range(model.spring_count):
+        if model.spring_damping[s] <= 0:
+            continue
+
+        i, j = model.spring_indices[s]
+
+        dir = state.particle_q[i] - state.particle_q[j]
+        nrm = np.linalg.norm(dir)
+        if nrm < 1e-8:
+            continue
+
+        kd = model.spring_damping[s]
+        nhat = dir / nrm
+        B = kd * np.outer(nhat, nhat)
+
+        i_active = model.particle_flags[i] & ParticleFlags.ACTIVE.value != 0
+        j_active = model.particle_flags[j] & ParticleFlags.ACTIVE.value != 0
+
+        if i_active:
+            A[3*i:3*i+3, 3*i:3*i+3] += scale * (-B)
+            A[3*i:3*i+3, 3*j:3*j+3] += scale * B
+        if j_active:
+            A[3*j:3*j+3, 3*i:3*i+3] += scale * B
+            A[3*j:3*j+3, 3*j:3*j+3] += scale * (-B)
 
 
 def eval_gravitational_forces(model: Model, state: State) -> None:
