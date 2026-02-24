@@ -1,0 +1,120 @@
+# ==============================================================================
+# Bonus Scene 2: Pendulum Chain
+# ==============================================================================
+# Physical setup:
+#   - 6 particles arranged vertically (along the z-axis)
+#   - Particle 0 (top) is fixed — acts as the pivot point
+#   - Particles 1–5 hang below in a chain, each connected to the one above
+#   - All free particles are given an identical small horizontal initial
+#     velocity (vx=0.3) to set the chain in pendulum-like motion
+#   - Spring rest length = 0.5 (matches initial vertical spacing)
+#   - Gravity pulls particles downward (default -9.81 in z)
+#   - Moderate spring stiffness (k=80) keeps the chain taut while allowing
+#     visible swinging without excessive numerical stiffness
+#   - Light damping (β=0.15) allows several oscillations before settling
+#
+# Interesting for implicit integration:
+#   - A chain of 5 coupled pendulums is a highly nonlinear system
+#   - The lower particles lag behind the upper ones, producing a
+#     characteristic "whip" shape during the first swing
+#   - With explicit Euler at h=0.005, this system is unstable due to
+#     the strong gravitational and spring coupling; ImplicitEulerSolver
+#     handles it stably and shows clear damped oscillation
+#   - The plot of particle 5 (tip) z-position shows how the implicit
+#     integrator correctly captures the decaying pendulum amplitude
+#
+# Particle layout (IDs and positions):
+#   0(fixed)   z=3.0  <- pivot
+#   1          z=2.5
+#   2          z=2.0
+#   3          z=1.5
+#   4          z=1.0
+#   5          z=0.5  <- tip (plotted)
+#   All at x=0, y=0; initial vel vx=+0.3 for particles 1-5
+# ==============================================================================
+
+solver:
+  type: implicit_euler
+  timestep: 0.005
+  # gravity field: default -9.81 in z (omitted = use default)
+
+# Plot the z-position of the chain tip (particle 5) over time.
+# We expect damped oscillation: initial drop, then swing settling to rest.
+plot:
+  particle_id: 5
+  dof: 2
+  y_range: [-1.0, 1.5]
+
+particles:
+  # Particle 0 — fixed pivot at top
+  - pos: [0.0, 0.0, 3.0]
+    vel: [0.0, 0.0, 0.0]
+    fixed: true
+    mass: 1.0
+    radius: 0.07
+
+  # Particle 1
+  - pos: [0.0, 0.0, 2.5]
+    vel: [0.3, 0.0, 0.0]
+    fixed: false
+    mass: 0.2
+    radius: 0.05
+
+  # Particle 2
+  - pos: [0.0, 0.0, 2.0]
+    vel: [0.3, 0.0, 0.0]
+    fixed: false
+    mass: 0.2
+    radius: 0.05
+
+  # Particle 3
+  - pos: [0.0, 0.0, 1.5]
+    vel: [0.3, 0.0, 0.0]
+    fixed: false
+    mass: 0.2
+    radius: 0.05
+
+  # Particle 4
+  - pos: [0.0, 0.0, 1.0]
+    vel: [0.3, 0.0, 0.0]
+    fixed: false
+    mass: 0.2
+    radius: 0.05
+
+  # Particle 5 — chain tip (plotted)
+  - pos: [0.0, 0.0, 0.5]
+    vel: [0.3, 0.0, 0.0]
+    fixed: false
+    mass: 0.2
+    radius: 0.05
+
+springs:
+  # Link 0-1 (pivot to first bob)
+  - particle_ids: [0, 1]
+    stiffness: 80.0
+    damping: 0.15
+    rest_length: 0.5
+
+  # Link 1-2
+  - particle_ids: [1, 2]
+    stiffness: 80.0
+    damping: 0.15
+    rest_length: 0.5
+
+  # Link 2-3
+  - particle_ids: [2, 3]
+    stiffness: 80.0
+    damping: 0.15
+    rest_length: 0.5
+
+  # Link 3-4
+  - particle_ids: [3, 4]
+    stiffness: 80.0
+    damping: 0.15
+    rest_length: 0.5
+
+  # Link 4-5 (to tip)
+  - particle_ids: [4, 5]
+    stiffness: 80.0
+    damping: 0.15
+    rest_length: 0.5

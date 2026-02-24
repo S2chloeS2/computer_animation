@@ -47,3 +47,64 @@ The major steps of launch a simulation is as follows:
 4. In each timestep, detect collisions and advance the state using the solver.
 
 For example, for PA1, a model and a solver are created in `assignments.pa1.load_scene`, and the timestepping happens in the while loop in `assignments.run.Runner.launch` method.
+
+
+## PA2 Bonus: Creative Scenes
+
+Two custom scenes are provided under `scenes/pa2/`. Both use only the existing
+spring forces already implemented in PA2 (no code changes required).
+
+---
+
+### Scene 1: Rope Bridge (`scenes/pa2/scene07_rope_bridge.yml`)
+
+**Run command:**
+```
+python3 -m assignments.run pa2 scenes/pa2/scene07_rope_bridge.yml
+```
+
+**Physical setup:**
+9 particles are placed horizontally at equal spacing (0.5 m) along the x-axis
+at height z=2.0. The leftmost particle (ID 0) and rightmost particle (ID 8)
+are fixed as anchors. The 7 free particles in between are connected by springs
+with rest length 0.5 m (matching the initial spacing) and moderate stiffness
+(k=200). Under the default gravity field (−9.81 m/s² in z), the free particles
+sag downward and the chain settles into a **catenary (hanging chain) shape** —
+the classic equilibrium of a flexible rope under gravity.
+
+**Why it is interesting for implicit integration:**
+With k=200 and h=0.005, the stiffness-to-timestep ratio (k·h²=0.005) is already
+in a regime where explicit Euler would exhibit growing oscillations. The
+`LinearizedImplicitSolver` handles this stably in a single linear solve per
+step, allowing the bridge to smoothly settle to its catenary equilibrium. The
+real-time plot shows the midpoint particle (ID 4) dropping from z=2.0 and
+converging to its equilibrium height with nicely damped oscillations.
+
+---
+
+### Scene 2: Pendulum Chain (`scenes/pa2/scene08_pendulum_chain.yml`)
+
+**Run command:**
+```
+python3 -m assignments.run pa2 scenes/pa2/scene08_pendulum_chain.yml
+```
+
+**Physical setup:**
+6 particles are arranged vertically with 0.5 m spacing. Particle 0 (top, z=3.0)
+is fixed as the pivot. Particles 1–5 hang below in a chain, each connected to
+the one above by a spring (k=80, rest length 0.5 m, damping β=0.15). All free
+particles are given an initial horizontal velocity of vx=0.3 m/s, which starts
+the chain swinging like a pendulum. Because particles further from the pivot
+lag behind, the chain traces a characteristic **whip shape** during the first
+swing before gradually settling into synchronized oscillation.
+
+**Why it is interesting for implicit integration:**
+A 5-link pendulum chain is a highly nonlinear, coupled system. The gravitational
+restoring force and spring tension interact across all links simultaneously.
+With h=0.005, explicit Euler is unstable for this setup (the chain rapidly
+diverges). The `ImplicitEulerSolver` (full Newton iteration) resolves the
+nonlinear coupling accurately at each step, maintaining stable damped oscillation
+throughout the simulation. The plot of the chain tip (particle 5) z-position
+clearly shows the decaying pendulum amplitude — a direct demonstration that
+the implicit integrator correctly captures energy dissipation in a multi-body
+coupled spring system.

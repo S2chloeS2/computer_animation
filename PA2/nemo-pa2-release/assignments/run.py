@@ -2,6 +2,7 @@ import importlib
 from collections.abc import Callable
 from typing import Annotated
 
+import numpy as np
 import polyscope as ps
 import polyscope.imgui as psim
 import polyscope.implot as psplot
@@ -166,7 +167,9 @@ def launch_pa_1_2(model: Model, solver: SolverBase, plspec: PlotSpec | None = No
                     psplot.SetupAxisLimits(
                         psplot.ImAxis_Y1, plspec.y_range_min, plspec.y_range_max, psplot.ImPlotCond_Always
                     )
-                    psplot.PlotLine("Vertical Pos.", data_x, data_z, plot_len)
+                    xs = np.asarray(data_x, dtype=np.float64)[:plot_len]
+                    ys = np.asarray(data_z, dtype=np.float64)[:plot_len]
+                    psplot.PlotLine("Vertical Pos.", xs, ys)
                     psplot.EndPlot()
 
     ps.set_user_callback(callback)

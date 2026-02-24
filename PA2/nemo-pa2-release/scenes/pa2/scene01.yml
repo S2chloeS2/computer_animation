@@ -4,7 +4,7 @@ solver:
   # - symplectic_euler
   # - midpoint
   # - linearized_implicit
-  type: symplectic_euler # midpoint
+  type: linearized_implicit # midpoint
   timestep: 0.005   # timestep size
 
 # What DOF of a particle over time to plot 
