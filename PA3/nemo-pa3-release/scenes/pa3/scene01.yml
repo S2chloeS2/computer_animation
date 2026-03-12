@@ -1,7 +1,7 @@
 solver:
   # solver type. Choose from
   # - contact_penalty
-  type: contact_penalty
+  type: multi_contact_iterative
   timestep: 0.0005   # timestep size
   # damping for particle-partcile contact penalty force (optional)
   particle_contact_penalty_damping: 0.01

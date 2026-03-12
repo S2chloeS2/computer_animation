@@ -97,26 +97,85 @@ class MultiContactSolver(SolverBase):
         # the penalty force is evaluated only once here.
         f_penalty = np.zeros_like(state_in.particle_f)
 
-        # Fill in the implementation here
+        for i in range(len(contacts.contact_type)):
+            if contacts.contact_type[i] == ContactType.PARTICLE_PARTICLE:
+                par0_id = contacts.contact_instance0[i]
+                par1_id = contacts.contact_instance1[i]
+                n = contacts.contact_normal[i]
+                depth = np.dot(contacts.contact_point1[i] - contacts.contact_point0[i], n)
+                if depth < 0.0:
+                    v_rel = np.dot(state_in.particle_qd[par1_id] - state_in.particle_qd[par0_id], n)
+                    F = penalty_force(depth, v_rel, self.stiffness, self.damping)
+                    if self.model.particle_flags[par1_id] & ParticleFlags.ACTIVE.value != 0:
+                        f_penalty[par1_id] += F * n
+                    if self.model.particle_flags[par0_id] & ParticleFlags.ACTIVE.value != 0:
+                        f_penalty[par0_id] -= F * n
+            elif contacts.contact_type[i] == ContactType.FIXED_SHAPE_PARTICLE:
+                shape_id = contacts.contact_instance0[i]
+                par_id = contacts.contact_instance1[i]
+                depth = np.dot(contacts.contact_point1[i] - contacts.contact_point0[i], contacts.contact_normal[i])
+                if depth < 0.0:
+                    n = contacts.contact_normal[i]
+                    stiffness = self.model.shape_penalty_params[shape_id, 0]
+                    damping = self.model.shape_penalty_params[shape_id, 1]
+                    v_rel = np.dot(state_in.particle_qd[par_id], n)
+                    F = penalty_force(depth, v_rel, stiffness, damping)
+                    f_penalty[par_id] += F * n
 
-        # TODO: Next, we enter into iterative solver
-        # At this point, you should have predicted state (position and velocity) based on the instantaneous contacts.
-        # and the preducted state is stored in state_out.
+        def f(model: Model, state: State) -> None:
+            eval_all_forces(model, state)
+            state.particle_f += np.outer(self.masked_mass, self.model.gravity)
+            state.particle_f += f_penalty
+
+        self.integrator.integrate(state_in, state_out, f, dt)
+
+        # Iterative CCD loop
         for _ in range(self.maxits):
             # 1. Continuous collision detection
+            self.collision.continuous_contacts(state_in, state_out, contacts)
             # If there are no continuous contacts, we can exit the loop
             if len(contacts.contact_type_continuous) == 0:
                 # print(f"BREAK t={t}")
                 break
             # 2. Apply impulses and adjust the positions and velocities in state_out using collision impulses.
-            # Hint: as described in the course note, you need to iterate through the continous contacts and
-            # apply impulses sequentially (the order is not important). Before you apply each impulse, make sure
-            # the contact is still valid (i.e., the contact is still approaching), as the previous collision impulse
-            # in the loop may have changed the contact state.
             for i in range(len(contacts.contact_type_continuous)):
-
-                # Replace the following line with your implementation.
-                pass
+                ctype = contacts.contact_type_continuous[i]
+                n = contacts.contact_normal_continuous[i]
+                if ctype == ContactType.FIXED_SHAPE_PARTICLE:
+                    shape_id = contacts.contact_instance0_continuous[i]
+                    par_id = contacts.contact_instance1_continuous[i]
+                    v_n = np.dot(state_out.particle_qd[par_id], n)
+                    if v_n >= 0.0:
+                        continue  # not approaching, skip
+                    e = min(
+                        self.model.particle_restitution_coeff[par_id],
+                        self.model.shape_restitution_coeff[shape_id],
+                    )
+                    dv = -(1.0 + e) * v_n
+                    state_out.particle_qd[par_id] += dv * n
+                    state_out.particle_q[par_id] += dv * n * dt
+                elif ctype == ContactType.PARTICLE_PARTICLE:
+                    par0_id = contacts.contact_instance0_continuous[i]
+                    par1_id = contacts.contact_instance1_continuous[i]
+                    v_rel_n = np.dot(state_out.particle_qd[par1_id] - state_out.particle_qd[par0_id], n)
+                    if v_rel_n >= 0.0:
+                        continue  # not approaching, skip
+                    e = min(
+                        self.model.particle_restitution_coeff[par0_id],
+                        self.model.particle_restitution_coeff[par1_id],
+                    )
+                    inv_mass0 = self.model.particle_inv_mass[par0_id]
+                    inv_mass1 = self.model.particle_inv_mass[par1_id]
+                    total_inv_mass = inv_mass0 + inv_mass1
+                    if total_inv_mass < 1e-12:
+                        continue
+                    J = -(1.0 + e) * v_rel_n / total_inv_mass
+                    if self.model.particle_flags[par0_id] & ParticleFlags.ACTIVE.value != 0:
+                        state_out.particle_qd[par0_id] -= J * inv_mass0 * n
+                        state_out.particle_q[par0_id] -= J * inv_mass0 * n * dt
+                    if self.model.particle_flags[par1_id] & ParticleFlags.ACTIVE.value != 0:
+                        state_out.particle_qd[par1_id] += J * inv_mass1 * n
+                        state_out.particle_q[par1_id] += J * inv_mass1 * n * dt
 
         # NOTE: here the iteration goes up to self.maxits times. You are _not_ reuired to implement the geometric
         # collision response. But if you want to earn 10 (out of 100) bonus points, you are welcome to implement

@@ -9,7 +9,7 @@ solver:
   # Time integrator type. Choose from
   # - symplectic
   # - midpoint
-  integrator: symplectic
+  integrator: midpoint
 
 # What DOF of a particle over time to plot 
 # This section is optional. If omitted, nothing will be plot.
