@@ -143,9 +143,55 @@ def continuous_collide_particle_particle(
         - contact normal: nparray (3,) contact normal direction in world frame when the earliest collision happens.
         None if no collision is detected.
     """
-    # TODO: Implement this function.
-    # Replace the following line with your implementation.
-    raise NotImplementedError("Not implemented yet.")
+    # Relative displacement: delta = (pos1_out - pos1_in) - (pos0_out - pos0_in)
+    d = pos1_in - pos0_in           # initial separation vector
+    delta = (pos1_out - pos1_in) - (pos0_out - pos0_in)
+
+    dd = np.dot(delta, delta)       # |delta|^2 (squared relative speed)
+
+    if dd < 1e-12:
+        # No relative motion between the two particles
+        return None
+
+    d_dot_delta = np.dot(d, delta)
+    d_dot_d = np.dot(d, d)
+    r_sum_sq = (radius0 + radius1) ** 2
+
+    # Discriminant of quadratic p(t) = (r0+r1)^2 - n(t)·n(t) > 0
+    # p(t) > 0 between roots t0 and t1 (particles overlapping)
+    disc = d_dot_delta * d_dot_delta + dd * (r_sum_sq - d_dot_d)
+
+    if disc < 0:
+        return None  # Never overlapping within this timestep
+
+    sqrt_disc = np.sqrt(disc)
+    t0 = (-d_dot_delta - sqrt_disc) / dd  # Earlier root: collision begins
+    t1 = (-d_dot_delta + sqrt_disc) / dd  # Later root:   collision ends
+
+    # At t0: relative normal velocity g(t0) = sqrt_disc / dd >= 0 (approaching)
+    # → no separate approach check needed when tc = t0
+
+    if 0.0 <= t0 <= 1.0:
+        # Normal case: collision begins in [0, 1]
+        tc = t0
+    elif t0 < 0.0 <= t1:
+        # Already overlapping at t=0; only valid if particles are still approaching
+        # g(0) = -(d · delta) > 0  ↔  d_dot_delta < 0
+        if d_dot_delta < 0.0:
+            tc = 0.0
+        else:
+            return None  # Overlapping but receding
+    else:
+        # t0 > 1 (collision starts after window) or t1 < 0 (entirely in the past)
+        return None
+
+    # Contact normal at tc: from particle 0 toward particle 1
+    n_tc = d + tc * delta
+    n_len = np.linalg.norm(n_tc)
+    if n_len < 1e-12:
+        return None
+
+    return tc, n_tc / n_len
 
 
 class CollisionDetector:
