@@ -291,18 +291,40 @@ class CollisionDetector:
 
         for j in range(model.particle_count):
             if model.particle_flags[j] & ParticleFlags.ACTIVE.value == 0:
-                # ignore fixed particles
                 continue
             for i in range(model.shape_count):
                 if model.shape_type[i] == GeoType.HALF_SPACE_PLANE:
-                    # TODO: Use `continuous_collide_particle_plane` to detect collision between the particle and the plane.
-                    # And add the detected contact information to the `contacts` object.
+                    n = continuous_collide_particle_plane(
+                        model.shape_transform[i],
+                        model.shape_inv_transform[i],
+                        state_0.particle_q[j],
+                        state_1.particle_q[j],
+                        model.particle_radius[j],
+                    )
+                    if n is not None:
+                        contacts.contact_instance0_continuous.append(i)
+                        contacts.contact_instance1_continuous.append(j)
+                        contacts.contact_type_continuous.append(ContactType.FIXED_SHAPE_PARTICLE)
+                        contacts.contact_normal_continuous.append(n)
 
-                    # Replace the following line with your implementation.
-                    pass
-
-        # TODO: Implement continuous collision detection for particle-particle contact.
-        # Detect contacts between particles.
-        # HERE it's ok if you implement a O(N^2) algorithm.
-        # The implmentation here is just to use the `continuous_collide_particle_particle` function
-        # and add detected constacts in `contacts` object.
+        # Particle-particle continuous collision detection (O(N^2) per instructions).
+        for j0 in range(model.particle_count):
+            for j1 in range(j0 + 1, model.particle_count):
+                # Skip fixed-fixed pairs
+                if (model.particle_flags[j0] & ParticleFlags.ACTIVE.value == 0) and \
+                   (model.particle_flags[j1] & ParticleFlags.ACTIVE.value == 0):
+                    continue
+                ret = continuous_collide_particle_particle(
+                    state_0.particle_q[j0],
+                    state_1.particle_q[j0],
+                    state_0.particle_q[j1],
+                    state_1.particle_q[j1],
+                    model.particle_radius[j0],
+                    model.particle_radius[j1],
+                )
+                if ret is not None:
+                    _, n = ret
+                    contacts.contact_instance0_continuous.append(j0)
+                    contacts.contact_instance1_continuous.append(j1)
+                    contacts.contact_type_continuous.append(ContactType.PARTICLE_PARTICLE)
+                    contacts.contact_normal_continuous.append(n)
