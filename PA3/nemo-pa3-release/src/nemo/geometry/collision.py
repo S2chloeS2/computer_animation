@@ -43,9 +43,21 @@ def collide_plane_sphere(
           In this way, the plane normal in world frame is `trans[:3, 1]` (i.e., trans @ np.array([0.0, 1.0, 0.0, 0.0])[:3]).
           and the plane pass throug the point `trans[:3, 3]` (i.e., trans @ np.array([0.0, 0.0, 0.0, 1.0])[:3]).
     """
-    # TODO: Implement this function.
-    # Replace the following line with your implementation.
-    raise NotImplementedError("Not implemented yet.")
+    # Plane normal (unit) and origin in world frame
+    plane_normal = trans[:3, 1]
+    plane_origin = trans[:3, 3]
+
+    # Signed distance from sphere center to plane surface (along normal)
+    dist_to_plane = np.dot(pos - plane_origin, plane_normal)
+    depth = dist_to_plane - radius
+
+    # Contact point on the plane: projection of sphere center onto the plane
+    contact_point_plane = pos - dist_to_plane * plane_normal
+
+    # Contact point on the sphere: surface point closest to the plane
+    contact_point_sphere = pos - radius * plane_normal
+
+    return depth, contact_point_plane, contact_point_sphere
 
 
 def collide_particle_particle(
