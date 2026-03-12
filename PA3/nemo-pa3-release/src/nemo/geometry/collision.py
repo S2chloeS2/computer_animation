@@ -188,11 +188,40 @@ class CollisionDetector:
                             # pointing out of the FIRST object, which is the fixed plane here.
                             contacts.contact_normal.append(model.shape_transform[i, :3, 1])
 
-        # Detect contacts between particles.
-        # TODO: Implement collision detection for particle-particle contact.
-        # The naive algorithm compares all pairs of particles, which is O(N^2) in the number of particles.
-        # You should try to implment the algorithm at least in O(N log N) complexity that we discussed in the
-        # lecture.
+        # Detect contacts between particles using sort-and-sweep (O(N log N)).
+        # Sort particle indices by their minimum x-extent (pos_x - radius).
+        # Then sweep: for each particle i, only test particles j whose min x-extent
+        # has not yet passed i's max x-extent, giving an early-exit inner loop.
+        positions = state.particle_q
+        radii = model.particle_radius
+        flags = model.particle_flags
+
+        sorted_indices = np.argsort(positions[:, 0] - radii)
+
+        for ii in range(model.particle_count):
+            i = sorted_indices[ii]
+            max_xi = positions[i, 0] + radii[i]
+            for jj in range(ii + 1, model.particle_count):
+                j = sorted_indices[jj]
+                # Early exit: no further particle can overlap i along x
+                if positions[j, 0] - radii[j] > max_xi:
+                    break
+                # Skip fixed-fixed pairs (neither will respond)
+                if (flags[i] & ParticleFlags.ACTIVE.value == 0) and (flags[j] & ParticleFlags.ACTIVE.value == 0):
+                    continue
+                ret = collide_particle_particle(positions[i], positions[j], radii[i], radii[j])
+                if ret is not None:
+                    depth, cp0, cp1 = ret
+                    if depth < 0.0:
+                        # Normal points outward from particle i (object0) toward particle j
+                        diff = positions[j] - positions[i]
+                        n_hat = diff / np.linalg.norm(diff)
+                        contacts.contact_instance0.append(i)
+                        contacts.contact_instance1.append(j)
+                        contacts.contact_type.append(ContactType.PARTICLE_PARTICLE)
+                        contacts.contact_point0.append(cp0)
+                        contacts.contact_point1.append(cp1)
+                        contacts.contact_normal.append(n_hat)
 
         return contacts
 
