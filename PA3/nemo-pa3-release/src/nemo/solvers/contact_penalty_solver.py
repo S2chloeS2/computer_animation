@@ -111,23 +111,31 @@ class ContactPenaltySolver(SolverBase):
         f_penalty = np.zeros_like(state_in.particle_f)
         for i in range(len(contacts.contact_type)):
             if contacts.contact_type[i] == ContactType.PARTICLE_PARTICLE:
-                # TODO: implement the impulse-based collision response for particle-particle contact.
-                # This is similar in spirit to the code below (for FIXED_SHAPE_PARTICLE contact).
-                # You need to add more code here, and handle fixed particles correctly.
-
-                # Replace the following line with your implementation.
-                pass
+                par0_id = contacts.contact_instance0[i]
+                par1_id = contacts.contact_instance1[i]
+                n = contacts.contact_normal[i]
+                depth = np.dot(contacts.contact_point1[i] - contacts.contact_point0[i], n)
+                if depth < 0.0:
+                    # Relative velocity along normal: positive = receding, negative = approaching
+                    v_rel = np.dot(state_in.particle_qd[par1_id] - state_in.particle_qd[par0_id], n)
+                    F = penalty_force(depth, v_rel, self.stiffness, self.damping)
+                    # Equal and opposite forces; skip fixed particles
+                    if self.model.particle_flags[par1_id] & ParticleFlags.ACTIVE.value != 0:
+                        f_penalty[par1_id] += F * n
+                    if self.model.particle_flags[par0_id] & ParticleFlags.ACTIVE.value != 0:
+                        f_penalty[par0_id] -= F * n
             elif contacts.contact_type[i] == ContactType.FIXED_SHAPE_PARTICLE:
                 shape_id = contacts.contact_instance0[i]
                 par_id = contacts.contact_instance1[i]
                 depth = np.dot(contacts.contact_point1[i] - contacts.contact_point0[i], contacts.contact_normal[i])
                 if depth < 0.0:
-                    # TODO: implement the impulse-based collision response for particle-fixed shape contact.
-                    # You need to use the `penalty_force` function above to compute the penalty force.
-                    # and update f_penalty accordingly.
-
-                    # Replace the following line with your implementation.
-                    pass
+                    n = contacts.contact_normal[i]
+                    stiffness = self.model.shape_penalty_params[shape_id, 0]
+                    damping = self.model.shape_penalty_params[shape_id, 1]
+                    # Velocity of particle along the outward plane normal
+                    v_rel = np.dot(state_in.particle_qd[par_id], n)
+                    F = penalty_force(depth, v_rel, stiffness, damping)
+                    f_penalty[par_id] += F * n
 
         def f(model: Model, state: State) -> None:
             eval_all_forces(model, state)
