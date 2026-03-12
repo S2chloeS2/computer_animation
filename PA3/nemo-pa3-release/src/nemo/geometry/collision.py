@@ -76,9 +76,20 @@ def collide_particle_particle(
 
         None if no collision is detected.
     """
-    # TODO: Implement this function.
-    # Replace the following line with your implementation.
-    raise NotImplementedError("Not implemented yet.")
+    diff = pos1 - pos0
+    dist = np.linalg.norm(diff)
+
+    # Degenerate case: same position, normal is undefined
+    if dist < 1e-12:
+        return None
+
+    n_hat = diff / dist
+    depth = dist - (radius0 + radius1)
+
+    contact_point0 = pos0 + radius0 * n_hat
+    contact_point1 = pos1 - radius1 * n_hat
+
+    return depth, contact_point0, contact_point1
 
 
 def continuous_collide_particle_plane(
