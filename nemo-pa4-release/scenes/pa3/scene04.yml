@@ -1,0 +1,74 @@
+solver:
+  # solver type. Choose from
+  # - contact_penalty
+  # - multi_contact_iterative
+  type: multi_contact_iterative
+
+  timestep: 0.0005   # timestep size
+
+  # damping for particle-partcile contact penalty force (optional)
+  particle_contact_penalty_damping: 0.4
+  particle_contact_penalty_stiffness: 1000.
+
+  # maximum number of iterations for iterative solver (optional)
+  # only useful for `multi_contact_iterative` solver. Ignored otherwise.
+  max_its: 4
+
+  # Time integrator type. Choose from
+  # - symplectic
+  # - midpoint
+  integrator: symplectic
+
+# A list of particles added explicitly
+particles:
+  # 1st particle
+  - pos: [0.0, 0.1, 0.9] 
+    radius: 0.5
+    mass: 0.2
+    fixed: true
+
+  - pos: [0.5, 0.5, 1.9] 
+    vel: [0, 0, 0]  # optional (default (0, 0, 0))
+    radius: 0.3
+    mass: 0.1
+
+  - pos: [-0.4, -0.4, 1.9] 
+    vel: [0, 0, 0]  # optional (default (0, 0, 0))
+    radius: 0.3
+    mass: 0.1
+
+  - pos: [-0.4, 0.5, 1.9] 
+    vel: [0, 0, 0]  # optional (default (0, 0, 0))
+    radius: 0.3
+    mass: 0.1
+
+  - pos: [0.6, -0.6, 1.9] 
+    vel: [0, 0, 0]  # optional (default (0, 0, 0))
+    radius: 0.3
+    mass: 0.1
+
+fixed_shapes:
+  - type: half_space_plane
+    normal: [0.0, 0.2, 1]
+    offset: 0.0
+    penalty_stiffness: 1000.
+    penalty_damping: 0.05
+    
+  - type: half_space_plane
+    normal: [0, -0.2, 1]
+    offset: 0.0
+    penalty_stiffness: 1000.
+    penalty_damping: 0.05
+
+  - type: half_space_plane
+    normal: [0.3, 0.0, 1]
+    offset: 0.0
+    penalty_stiffness: 1000.
+    penalty_damping: 0.05
+    
+  - type: half_space_plane
+    normal: [-0.3, 0.0, 1]
+    offset: 0.0
+    penalty_stiffness: 1000.
+    penalty_damping: 0.05
+    

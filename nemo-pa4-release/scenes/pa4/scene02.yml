@@ -1,0 +1,50 @@
+solver:
+  # solver type. Choose from
+  # - contact_penalty
+  # - lcp_gs
+  type: lcp_gs
+  #type: contact_penalty
+
+  timestep: 0.0005   # timestep size
+
+  # damping for particle-partcile contact penalty force (optional)
+  particle_contact_penalty_damping: 0.01
+  particle_contact_penalty_stiffness: 1000.
+
+  # Time integrator type. Choose from
+  # - symplectic
+  # - midpoint
+  integrator: symplectic
+
+shapes:
+  - type: sphere
+    pos: [0.0, -3.0, 1.5]
+    radius: 0.8
+    density: 2.0
+    penalty_stiffness: 4000.
+    penalty_damping: 0.5
+
+  - type: half_space_plane
+    normal: [0.0, 0., 1]
+    offset: 0.0
+    penalty_stiffness: 1000.
+    penalty_damping: 0.9
+    restitution: 1.0
+    
+  - type: cylinder
+    pos: [0.0, 0.0, 2.0]
+    radius: 0.5
+    length: 2.4 # cylinder length
+    # rotate cylinder by 45 along x
+    orient: [0.9238795325112867, 0.3826834323650898, 0.0, 0.0] # quaternion (scalar first) 
+    penalty_stiffness: 4000.
+    penalty_damping: 0.5
+
+  - type: box
+    pos: [0.0, 3.0, 1.5]
+    size: [1.0, 1.0, 1.0]
+    density: 2.0
+    penalty_stiffness: 4000.
+    penalty_damping: 0.5
+    fixed: False # optional. Default is False
+
