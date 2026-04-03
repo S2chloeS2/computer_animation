@@ -2,7 +2,7 @@ solver:
   # solver type. Choose from
   # - contact_penalty
   # - lcp_gs
-  type: lcp_gs
+  type: contact_penalty
 
   timestep: 0.0005   # timestep size
 
