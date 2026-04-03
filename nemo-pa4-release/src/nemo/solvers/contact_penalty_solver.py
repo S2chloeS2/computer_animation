@@ -144,22 +144,55 @@ class ContactPenaltySolver(SolverBase):
                 )
                 f_particle_penalty[par_id] += fp * contacts.contact_normal[i]
             elif contacts.contact_type[i] == ContactType.FIXED_SHAPE_SHAPE:
-                # TODO: Finish the implementation of the penalty force for fixed shape-fixed shape contact.
                 # the first shape is always fixed, and the second shape is always active
-                shape_id0 = contacts.contact_instance0[i]
-                shape_id1 = contacts.contact_instance1[i]
-                # Accumulate the penalty force in f_shape_penalty
-                # Only the values corresponding to the active shape should be updated.
-                # ...
+                shape_id0 = contacts.contact_instance0[i]  # fixed shape
+                shape_id1 = contacts.contact_instance1[i]  # active rigid body
+
+                # vector from CoM of active body to contact point (world frame)
+                r1 = contacts.contact_point1[i] - state_in.shape_q[shape_id1, :3]
+
+                # velocity at the contact point (linear + angular contribution)
+                v_contact = state_in.shape_qd[shape_id1, :3] + np.cross(state_in.shape_qd[shape_id1, 3:], r1)
+                vel = np.dot(v_contact, contacts.contact_normal[i])
+
+                fp = penalty_force(
+                    contacts.contact_depth[i],
+                    vel,
+                    self.model.shape_penalty_params[shape_id0, 0],  # stiffness
+                    self.model.shape_penalty_params[shape_id0, 1],  # damping
+                )
+
+                if self.model.shape_flags[shape_id1] & ShapeFlags.ACTIVE.value != 0:
+                    f_shape_penalty[shape_id1, :3] += fp * contacts.contact_normal[i]
+                    # torque = r x F
+                    f_shape_penalty[shape_id1, 3:] += np.cross(r1, fp * contacts.contact_normal[i])
 
             elif contacts.contact_type[i] == ContactType.SHAPE_SHAPE:
-                # TODO: Finish the implementation of the penalty force for shape-shape contact.
                 # both the first and second shape are active
                 shape_id0 = contacts.contact_instance0[i]
                 shape_id1 = contacts.contact_instance1[i]
-                # Accumulate the penalty force in f_shape_penalty
-                # The values corresponding to both shape should be updated.
-                # ...
+
+                # vectors from each CoM to the respective contact points (world frame)
+                r0 = contacts.contact_point0[i] - state_in.shape_q[shape_id0, :3]
+                r1 = contacts.contact_point1[i] - state_in.shape_q[shape_id1, :3]
+
+                # velocities at the contact points
+                v0_contact = state_in.shape_qd[shape_id0, :3] + np.cross(state_in.shape_qd[shape_id0, 3:], r0)
+                v1_contact = state_in.shape_qd[shape_id1, :3] + np.cross(state_in.shape_qd[shape_id1, 3:], r1)
+                # relative velocity of body1 w.r.t. body0 along normal
+                vel = np.dot(v1_contact - v0_contact, contacts.contact_normal[i])
+
+                fp = penalty_force(contacts.contact_depth[i], vel, self.stiffness, self.damping)
+
+                # normal points outward from body0, so:
+                # body1 gets +fp*n (pushed away from body0)
+                # body0 gets -fp*n (pushed away from body1)
+                if self.model.shape_flags[shape_id1] & ShapeFlags.ACTIVE.value != 0:
+                    f_shape_penalty[shape_id1, :3] += fp * contacts.contact_normal[i]
+                    f_shape_penalty[shape_id1, 3:] += np.cross(r1, fp * contacts.contact_normal[i])
+                if self.model.shape_flags[shape_id0] & ShapeFlags.ACTIVE.value != 0:
+                    f_shape_penalty[shape_id0, :3] -= fp * contacts.contact_normal[i]
+                    f_shape_penalty[shape_id0, 3:] -= np.cross(r0, fp * contacts.contact_normal[i])
 
         def f(model: Model, state: State) -> None:
             state.clear_forces()

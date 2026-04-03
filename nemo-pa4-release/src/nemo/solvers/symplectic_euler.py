@@ -64,16 +64,57 @@ class SymplecticEulerSolver(SolverBase, IntegratorBase):
             state_out.particle_q = state_in.particle_q + state_out.particle_qd * dt
         # integrate rigid body states
         if self.model.shape_count > 0:
-            # 1. linear velocity
+            # 1. linear velocity (symplectic: velocity updated first)
             state_out.shape_qd[:, :3] = (
                 state_in.shape_qd[:, :3] + state_in.shape_f[:, :3] * self.model.shape_inv_mass[:, None] * dt
             )
-            # TODO: Finish the integration of the rigid body states.
-            # I already provided the code to update linear velocity above.
-            # You need to update 1) the center of mass position, 2) the angular velocity and 3) the orientation of 
-            # the rigid body.
-            #
-            # Please refer to Sec. 1.1.5 of the course notes.
+
+            # 2. center of mass position (use the NEW linear velocity - symplectic!)
+            active_mask = self.model.shape_flags & ShapeFlags.ACTIVE.value != 0
+            state_out.shape_q[:, :3] = state_in.shape_q[:, :3].copy()
+            state_out.shape_q[active_mask, :3] = (
+                state_in.shape_q[active_mask, :3] + state_out.shape_qd[active_mask, :3] * dt
+            )
+
+            # 3. angular velocity and 4. orientation (quaternion) per active shape
+            for i in range(self.model.shape_count):
+                if not (self.model.shape_flags[i] & ShapeFlags.ACTIVE.value):
+                    # keep orientation and angular velocity unchanged for static shapes
+                    state_out.shape_qd[i, 3:] = state_in.shape_qd[i, 3:]
+                    state_out.shape_q[i, 3:] = state_in.shape_q[i, 3:]
+                    continue
+
+                # rotation matrix from current quaternion (state_in)
+                R_mat = R.from_quat(state_in.shape_q[i, 3:], scalar_first=True).as_matrix()
+
+                # Step 1: torque from world frame → body frame
+                tau_body = R_mat.T @ state_in.shape_f[i, 3:]
+
+                # Step 2: angular velocity from world frame → body frame
+                omega_body = R_mat.T @ state_in.shape_qd[i, 3:]
+
+                # Step 3: angular acceleration in body frame (Euler's eq. with Coriolis term)
+                # I_body * omega_dot = tau_body - omega_body x (I_body * omega_body)
+                I_body = self.model.shape_inertia[i]
+                I_body_inv = self.model.shape_inv_inertia[i]
+                omega_dot_body = I_body_inv @ (tau_body - np.cross(omega_body, I_body @ omega_body))
+
+                # Step 4: update angular velocity in body frame
+                omega_body_new = omega_body + omega_dot_body * dt
+
+                # Step 5: convert back to world frame
+                omega_world_new = R_mat @ omega_body_new
+
+                # Step 6: apply damping factor (alpha=0.999) to prevent blow-up
+                omega_world_new *= 0.999
+
+                state_out.shape_qd[i, 3:] = omega_world_new
+
+                # Step 7: update orientation quaternion using the NEW angular velocity (symplectic!)
+                # q^{n+1} = q(omega_world^{n+1} * dt) ⊗ q^n
+                delta_rot = R.from_rotvec(state_out.shape_qd[i, 3:] * dt)
+                q_in = R.from_quat(state_in.shape_q[i, 3:], scalar_first=True)
+                state_out.shape_q[i, 3:] = (delta_rot * q_in).as_quat(scalar_first=True)
 
     @override
     def step(self, state_in: State, state_out: State, dt: float | None = None):
