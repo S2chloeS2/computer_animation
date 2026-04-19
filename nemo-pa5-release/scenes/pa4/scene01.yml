@@ -1,0 +1,54 @@
+solver:
+  # solver type. Choose from
+  # - contact_penalty
+  # - lcp_gs
+  type: contact_penalty
+  #type: lcp_gs
+  timestep: 0.0005   # timestep size
+
+  # damping for particle-partcile contact penalty force (optional)
+  particle_contact_penalty_damping: 0.3
+  particle_contact_penalty_stiffness: 1000.
+  # Time integrator type. Choose from
+  # - symplectic
+  # - midpoint
+  integrator: symplectic
+
+# A list of particles added explicitly
+#  - pos: [0, -0.01, 1.9] 
+#    vel: [0, 0, 0]  # optional (default (0, 0, 0))
+#    radius: 0.3
+#    mass: 0.1
+
+shapes:
+  - type: box
+    pos: [0.0, 2.0, 1.5]
+    size: [1.0, 1.0, 1.0]
+    density: 0.3
+    penalty_stiffness: 4000.
+    penalty_damping: 0.5
+
+  - type: half_space_plane
+    normal: [0.0, 0.2, 1]
+    offset: 0.0
+    penalty_stiffness: 1000.
+    penalty_damping: 0.05
+    
+  - type: half_space_plane
+    normal: [0, -0.2, 1]
+    offset: 0.0
+    penalty_stiffness: 1000.
+    penalty_damping: 0.05
+
+  - type: half_space_plane
+    normal: [0.2, 0.0, 1]
+    offset: 0.0
+    penalty_stiffness: 1000.
+    penalty_damping: 0.05
+    
+  - type: half_space_plane
+    normal: [-0.2, 0.0, 1]
+    offset: 0.0
+    penalty_stiffness: 1000.
+    penalty_damping: 0.05
+    
