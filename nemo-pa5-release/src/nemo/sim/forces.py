@@ -323,6 +323,46 @@ def eval_cloth_stretch_shear_forces(model: Model, state: State, A: SparseParticl
         # the [i, j] block of A, if both i and j are active vertices.
         # If either i or j is a fixed vertex, the block should be zero (think why)
 
+        a = model.tri_areas[tri]
+        d = model.tri_uv_inv[tri]  # shape (2,2): [[d00,d01],[d10,d11]]
+        w_u = wuv[:, 0]
+        w_v = wuv[:, 1]
+
+        # ----------------------------------------------------------------
+        # Shear Force (eq 1.10–1.12, no damping yet)
+        # C = w_u^T * w_v   (no area)
+        # f_i = -a * kr * C * ∇C_i
+        # ----------------------------------------------------------------
+        C_shear = np.dot(w_u, w_v)
+
+        # ∇C per vertex (eq 1.11)
+        gs0 = -(d[0, 0] + d[1, 0]) * w_v - (d[0, 1] + d[1, 1]) * w_u
+        gs1 =   d[0, 0] * w_v + d[0, 1] * w_u
+        gs2 =   d[1, 0] * w_v + d[1, 1] * w_u
+
+        t0_active = model.particle_flags[t0] & ParticleFlags.ACTIVE.value != 0
+        t1_active = model.particle_flags[t1] & ParticleFlags.ACTIVE.value != 0
+        t2_active = model.particle_flags[t2] & ParticleFlags.ACTIVE.value != 0
+
+        # Shear forces
+        shear_scale = a * kr * C_shear
+        if t0_active:
+            state.particle_f[t0] -= shear_scale * gs0
+        if t1_active:
+            state.particle_f[t1] -= shear_scale * gs1
+        if t2_active:
+            state.particle_f[t2] -= shear_scale * gs2
+
+        # Shear Jacobian: +h² * a * kr * outer(gs_i, gs_j)  for i≤j, both active
+        h2akr = h2 * a * kr
+        verts = [(t0, gs0, t0_active), (t1, gs1, t1_active), (t2, gs2, t2_active)]
+        for idx_i, (ti, gi, ai) in enumerate(verts):
+            for tj, gj, aj in verts[idx_i:]:
+                if ai and aj:
+                    i_idx, j_idx = (ti, tj) if ti <= tj else (tj, ti)
+                    gi_ord, gj_ord = (gi, gj) if ti <= tj else (gj, gi)
+                    A.accumu_block(i_idx, j_idx, h2akr * np.outer(gi_ord, gj_ord))
+
 
 def eval_cloth_bending_forces(model: Model, state: State) -> None:
     """
