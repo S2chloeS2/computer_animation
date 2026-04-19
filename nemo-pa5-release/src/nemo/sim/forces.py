@@ -363,6 +363,115 @@ def eval_cloth_stretch_shear_forces(model: Model, state: State, A: SparseParticl
                     gi_ord, gj_ord = (gi, gj) if ti <= tj else (gj, gi)
                     A.accumu_block(i_idx, j_idx, h2akr * np.outer(gi_ord, gj_ord))
 
+        # ----------------------------------------------------------------
+        # Stretch Force (eq 1.5–1.9, no damping yet)
+        # C_u = ||w_u|| - 1,  C_v = ||w_v|| - 1   (no area)
+        # f_i = -a * ks * (C_u * ∇Cu_i + C_v * ∇Cv_i)
+        # ----------------------------------------------------------------
+        wu_n = np.linalg.norm(w_u)
+        wv_n = np.linalg.norm(w_v)
+
+        if wu_n > 1e-10 and wv_n > 1e-10:
+            wu_hat = w_u / wu_n
+            wv_hat = w_v / wv_n
+            C_u = wu_n - 1.0
+            C_v = wv_n - 1.0
+
+            # ∇C_u per vertex (eq 1.8)
+            gu0 = -(d[0, 0] + d[1, 0]) * wu_hat
+            gu1 =   d[0, 0] * wu_hat
+            gu2 =   d[1, 0] * wu_hat
+            # ∇C_v per vertex (eq 1.8)
+            gv0 = -(d[0, 1] + d[1, 1]) * wv_hat
+            gv1 =   d[0, 1] * wv_hat
+            gv2 =   d[1, 1] * wv_hat
+
+            # Stretch forces
+            aks = a * ks
+            if t0_active:
+                state.particle_f[t0] -= aks * (C_u * gu0 + C_v * gv0)
+            if t1_active:
+                state.particle_f[t1] -= aks * (C_u * gu1 + C_v * gv1)
+            if t2_active:
+                state.particle_f[t2] -= aks * (C_u * gu2 + C_v * gv2)
+
+            # Stretch Jacobian: +h² * a * ks * (outer(gu_i,gu_j) + outer(gv_i,gv_j))
+            h2aks = h2 * aks
+            stretch_verts = [
+                (t0, gu0, gv0, t0_active),
+                (t1, gu1, gv1, t1_active),
+                (t2, gu2, gv2, t2_active),
+            ]
+            for idx_i, (ti, gui, gvi, ai) in enumerate(stretch_verts):
+                for tj, guj, gvj, aj in stretch_verts[idx_i:]:
+                    if ai and aj:
+                        i_idx, j_idx = (ti, tj) if ti <= tj else (tj, ti)
+                        if ti <= tj:
+                            blk = np.outer(gui, guj) + np.outer(gvi, gvj)
+                        else:
+                            blk = np.outer(guj, gui) + np.outer(gvj, gvi)
+                        A.accumu_block(i_idx, j_idx, h2aks * blk)
+
+            # ----------------------------------------------------------------
+            # Stretch Damping (eq 1.24)
+            # C_dot_u = Σ_j ∇Cu_j · v_j
+            # f_i = -a * ksd * C_dot_u * ∇Cu_i  (same for v)
+            # A velocity Jacobian: +h * a * ksd * outer(gu_i, gu_j)
+            # ----------------------------------------------------------------
+            v0_qd = state.particle_qd[t0]
+            v1_qd = state.particle_qd[t1]
+            v2_qd = state.particle_qd[t2]
+
+            Cu_dot = np.dot(gu0, v0_qd) + np.dot(gu1, v1_qd) + np.dot(gu2, v2_qd)
+            Cv_dot = np.dot(gv0, v0_qd) + np.dot(gv1, v1_qd) + np.dot(gv2, v2_qd)
+
+            aksd = a * ksd
+            if t0_active:
+                state.particle_f[t0] -= aksd * (Cu_dot * gu0 + Cv_dot * gv0)
+            if t1_active:
+                state.particle_f[t1] -= aksd * (Cu_dot * gu1 + Cv_dot * gv1)
+            if t2_active:
+                state.particle_f[t2] -= aksd * (Cu_dot * gu2 + Cv_dot * gv2)
+
+            haksd = h * aksd
+            for idx_i, (ti, gui, gvi, ai) in enumerate(stretch_verts):
+                for tj, guj, gvj, aj in stretch_verts[idx_i:]:
+                    if ai and aj:
+                        i_idx, j_idx = (ti, tj) if ti <= tj else (tj, ti)
+                        if ti <= tj:
+                            blk = np.outer(gui, guj) + np.outer(gvi, gvj)
+                        else:
+                            blk = np.outer(guj, gui) + np.outer(gvj, gvi)
+                        A.accumu_block(i_idx, j_idx, haksd * blk)
+
+        # ----------------------------------------------------------------
+        # Shear Damping (eq 1.24)
+        # C_dot = Σ_j ∇C_j · v_j
+        # f_i = -a * krd * C_dot * ∇C_i
+        # A velocity Jacobian: +h * a * krd * outer(gs_i, gs_j)
+        # ----------------------------------------------------------------
+        v0_qd = state.particle_qd[t0]
+        v1_qd = state.particle_qd[t1]
+        v2_qd = state.particle_qd[t2]
+
+        Cs_dot = np.dot(gs0, v0_qd) + np.dot(gs1, v1_qd) + np.dot(gs2, v2_qd)
+
+        akrd = a * krd
+        if t0_active:
+            state.particle_f[t0] -= akrd * Cs_dot * gs0
+        if t1_active:
+            state.particle_f[t1] -= akrd * Cs_dot * gs1
+        if t2_active:
+            state.particle_f[t2] -= akrd * Cs_dot * gs2
+
+        hakrd = h * akrd
+        for idx_i, (ti, gi, ai) in enumerate(verts):
+            for tj, gj, aj in verts[idx_i:]:
+                if ai and aj:
+                    i_idx, j_idx = (ti, tj) if ti <= tj else (tj, ti)
+                    gi_ord, gj_ord = (gi, gj) if ti <= tj else (gj, gi)
+                    A.accumu_block(i_idx, j_idx, hakrd * np.outer(gi_ord, gj_ord))
+
 
 def eval_cloth_bending_forces(model: Model, state: State) -> None:
     """
@@ -370,8 +479,59 @@ def eval_cloth_bending_forces(model: Model, state: State) -> None:
     in `state.particle_f`
     """
     for ii in range(model.edge_count):
+        # PDF notation: x1=v0, x2=v1 (edge), x3=v2, x4=v3 (tips)
         v0, v1, v2, v3 = model.edge_indices[ii]
-        e = state.particle_q[v1] - state.particle_q[v0]
-        # ...
-        # This should be a fairly straightforward implementation if you understand and follow
-        # the course notes carefully.
+        kb, kbd = model.edge_materials[ii]
+        theta_rest = model.edge_rest_angle[ii]
+
+        x1 = state.particle_q[v0]
+        x2 = state.particle_q[v1]
+        x3 = state.particle_q[v2]
+        x4 = state.particle_q[v3]
+
+        e = x2 - x1                        # edge vector
+        en = np.linalg.norm(e)
+
+        # area-scaled normals (NOT unit normals)
+        n1 = np.cross(e, x3 - x1)          # eq 1.14
+        n2 = np.cross(x4 - x1, e)          # eq 1.14
+
+        n1n = np.linalg.norm(n1)
+        n2n = np.linalg.norm(n2)
+
+        # skip degenerate triangles
+        if en < 1e-10 or n1n < 1e-10 or n2n < 1e-10:
+            continue
+
+        # dihedral angle via arctan2 (eq 1.14–1.15)
+        cos_t = np.dot(n1, n2) / (n1n * n2n)
+        cos_t = np.clip(cos_t, -1.0, 1.0)          # numerical stability
+        sin_t = np.dot(np.cross(n1 / n1n, n2 / n2n), e / en)
+        theta = np.arctan2(sin_t, cos_t)
+        C = theta - theta_rest
+
+        # gradients of theta (eq 1.16–1.19)
+        g3 = -(en / n1n ** 2) * n1                              # ∇_{x3} theta
+        g4 = -(en / n2n ** 2) * n2                              # ∇_{x4} theta
+        g1 = -((x2 - x3) @ e / en ** 2) * g3 - ((x2 - x4) @ e / en ** 2) * g4  # ∇_{x1}
+        g2 =  ((x1 - x3) @ e / en ** 2) * g3 + ((x1 - x4) @ e / en ** 2) * g4  # ∇_{x2}
+
+        bend_verts = [
+            (v0, g1, model.particle_flags[v0] & ParticleFlags.ACTIVE.value != 0),
+            (v1, g2, model.particle_flags[v1] & ParticleFlags.ACTIVE.value != 0),
+            (v2, g3, model.particle_flags[v2] & ParticleFlags.ACTIVE.value != 0),
+            (v3, g4, model.particle_flags[v3] & ParticleFlags.ACTIVE.value != 0),
+        ]
+
+        # Bending force: f_i = -kb * C * ∇theta_i  (no area, eq 1.20)
+        kbC = kb * C
+        for vi, gi, active in bend_verts:
+            if active:
+                state.particle_f[vi] -= kbC * gi
+
+        # Bending damping: f_i = -kbd * C_dot * ∇theta_i
+        C_dot = sum(np.dot(gi, state.particle_qd[vi]) for vi, gi, _ in bend_verts)
+        kbd_Cdot = kbd * C_dot
+        for vi, gi, active in bend_verts:
+            if active:
+                state.particle_f[vi] -= kbd_Cdot * gi
