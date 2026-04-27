@@ -516,22 +516,17 @@ def eval_cloth_bending_forces(model: Model, state: State) -> None:
         g1 = -((x2 - x3) @ e / en ** 2) * g3 - ((x2 - x4) @ e / en ** 2) * g4  # ∇_{x1}
         g2 =  ((x1 - x3) @ e / en ** 2) * g3 + ((x1 - x4) @ e / en ** 2) * g4  # ∇_{x2}
 
-        bend_verts = [
-            (v0, g1, model.particle_flags[v0] & ParticleFlags.ACTIVE.value != 0),
-            (v1, g2, model.particle_flags[v1] & ParticleFlags.ACTIVE.value != 0),
-            (v2, g3, model.particle_flags[v2] & ParticleFlags.ACTIVE.value != 0),
-            (v3, g4, model.particle_flags[v3] & ParticleFlags.ACTIVE.value != 0),
-        ]
+        bend_verts = [(v0, g1), (v1, g2), (v2, g3), (v3, g4)]
 
         # Bending force: f_i = -kb * C * ∇theta_i  (no area, eq 1.20)
+        # NOTE: applied to ALL vertices (including fixed), because bending is explicit.
+        # Fixed vertex delta_qd is zeroed out in large_step_cloth.py after solving.
         kbC = kb * C
-        for vi, gi, active in bend_verts:
-            if active:
-                state.particle_f[vi] -= kbC * gi
+        for vi, gi in bend_verts:
+            state.particle_f[vi] -= kbC * gi
 
         # Bending damping: f_i = -kbd * C_dot * ∇theta_i
-        C_dot = sum(np.dot(gi, state.particle_qd[vi]) for vi, gi, _ in bend_verts)
+        C_dot = sum(np.dot(gi, state.particle_qd[vi]) for vi, gi in bend_verts)
         kbd_Cdot = kbd * C_dot
-        for vi, gi, active in bend_verts:
-            if active:
-                state.particle_f[vi] -= kbd_Cdot * gi
+        for vi, gi in bend_verts:
+            state.particle_f[vi] -= kbd_Cdot * gi
