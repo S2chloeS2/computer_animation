@@ -252,26 +252,50 @@ class FluidFlipSolver(SolverBase):
         assert state_in.fluid_particle_qd is not None and state_in.fluid_particle_q is not None
         assert state_out.fluid_u_x is not None and state_out.fluid_u_y is not None
 
-        # TODO: Implement your FLIP solver algorithm here.
+        dx = model.fluid_cell_size
+        res_x, res_y = int(model.fluid_domain_res[0]), int(model.fluid_domain_res[1])
+        domain_w = model.fluid_domain_size[0]
+        domain_h = model.fluid_domain_size[1]
 
-        # Here are the steps you need to follow:
-        # 1. advect particles
-        # NOTE: after advection, make sure all particles stays within the simulation domain
+        # 1. advect particles: q_new = q_old + v * dt, clamp to domain
+        state_out.fluid_particle_q = state_in.fluid_particle_q + state_in.fluid_particle_qd * dt
+        state_out.fluid_particle_q[:, 0] = np.clip(state_out.fluid_particle_q[:, 0], 0.0, domain_w - 1e-6)
+        state_out.fluid_particle_q[:, 1] = np.clip(state_out.fluid_particle_q[:, 1], 0.0, domain_h - 1e-6)
+        state_out.fluid_particle_qd = state_in.fluid_particle_qd.copy()
+
+        # voxel coordinates of each particle
+        par_voxel_coord = (state_out.fluid_particle_q / dx).astype(np.int32)
+        par_voxel_coord[:, 0] = np.clip(par_voxel_coord[:, 0], 0, res_x - 1)
+        par_voxel_coord[:, 1] = np.clip(par_voxel_coord[:, 1], 0, res_y - 1)
 
         # 2. transfer particle velocity to grid
-        # As a hint, I implmented this transfer in a separate function:
-        #   _transfer_particle_velocity_to_grid(par_voxel_coord, state_out)
-        # 2.1 classify all voxels as fluid voxel or air voxel
-        # 2.2 make a copy to prepare for FLIP
-        # 3.apply gravity to grid velocity
+        self._transfer_particle_velocity_to_grid(par_voxel_coord, state_out)
 
-        # 4. solve the pressure on grid
-        # As a hint, I implmented this pressure projection in a separate function:
-        # self._pressure_projection(state_out)
+        # 2.1 classify voxels as WATER or AIR, build index mappings for pressure solve
+        self._voxel_type.fill(VoxelType.AIR)
+        self._voxel_type[par_voxel_coord[:, 1], par_voxel_coord[:, 0]] = VoxelType.WATER
+        idx = 0
+        for iy in range(res_y):
+            for ix in range(res_x):
+                if self._voxel_type[iy, ix] == VoxelType.WATER:
+                    self._voxel2index[iy, ix] = idx
+                    self._index2voxel[idx] = [ix, iy]
+                    idx += 1
+        self._n_water_voxels = idx
 
-        # 5. transfer grid velocity to particles
-        # As a hint, I implmented this transfer in a separate function:
-        # self._transfer_grid_velocity_to_particles(par_voxel_coord, state_in, state_out)
+        # 2.2 copy grid velocity into state_in for FLIP (old velocity reference)
+        state_in.fluid_u_x = state_out.fluid_u_x.copy()
+        state_in.fluid_u_y = state_out.fluid_u_y.copy()
 
-        # For all those helper functions, I left them there for you as a
-        # reference. Feel free to change/refactor them as you see fit.
+        # 3. apply gravity to u_y edges adjacent to at least one WATER voxel
+        for ix in range(res_x):
+            for iy in range(1, res_y):
+                if (self._voxel_type[iy - 1, ix] == VoxelType.WATER or
+                        self._voxel_type[iy, ix] == VoxelType.WATER):
+                    state_out.fluid_u_y[iy, ix] += self._GRAVITY * dt
+
+        # 4. pressure projection (Step 3)
+        self._pressure_projection(state_out)
+
+        # 5. grid-to-particle transfer with PIC/FLIP blend (Step 4)
+        self._transfer_grid_velocity_to_particles(par_voxel_coord, state_in, state_out)
