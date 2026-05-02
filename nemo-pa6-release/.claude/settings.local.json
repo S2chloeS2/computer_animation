@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -r \"TODO\\\\|NotImplementedError\\\\|pass\\\\s*$\" --include=\"*.py\" src/ assignments/pa6.py)",
+      "Bash(python -m pytest src/tests/test_fluid.py -v)",
+      "Bash(uv run *)",
+      "Bash(uv sync *)",
+      "Bash(PYTHONPATH=src uv run pytest src/tests/test_fluid.py -v)",
+      "Bash(PYTHONPATH=src uv run python -m pytest src/tests/test_fluid.py -v)",
+      "Bash(ls src/nemo/tests/)",
+      "Bash(ls tests/)"
+    ]
+  }
+}

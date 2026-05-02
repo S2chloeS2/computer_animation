@@ -123,7 +123,47 @@ class FluidFlipSolver(SolverBase):
         # initialize grid velocity to 0
         state.fluid_u_x.fill(0)
         state.fluid_u_y.fill(0)
-        # TODO: iterate over all particles and transfer their velocity to the grid
+
+        dx = model.fluid_cell_size
+        res_y, res_x = model.fluid_domain_res[1], model.fluid_domain_res[0]
+        n_particles = state.fluid_particle_q.shape[0]
+
+        for p in range(n_particles):
+            px, py = state.fluid_particle_q[p, 0], state.fluid_particle_q[p, 1]
+            vx, vy = state.fluid_particle_qd[p, 0], state.fluid_particle_qd[p, 1]
+            wx, wy = px / dx, py / dx
+
+            # --- u_x: staggered at (ix*dx, (iy+0.5)*dx), so offset = (wx, wy-0.5) ---
+            fx, fy = wx, wy - 0.5
+            i0, j0 = int(np.floor(fx)), int(np.floor(fy))
+            i1, j1 = i0 + 1, j0 + 1
+            s, t = fx - i0, fy - j0
+            for (jj, ii, w) in [(j0, i0, (1-s)*(1-t)), (j0, i1, s*(1-t)),
+                                 (j1, i0, (1-s)*t),    (j1, i1, s*t)]:
+                if 0 <= jj < res_y and 0 <= ii <= res_x:
+                    state.fluid_u_x[jj, ii] += w * vx
+                    self._u_x_weights[jj, ii] += w
+
+            # --- u_y: staggered at ((ix+0.5)*dx, iy*dx), so offset = (wx-0.5, wy) ---
+            fx, fy = wx - 0.5, wy
+            i0, j0 = int(np.floor(fx)), int(np.floor(fy))
+            i1, j1 = i0 + 1, j0 + 1
+            s, t = fx - i0, fy - j0
+            for (jj, ii, w) in [(j0, i0, (1-s)*(1-t)), (j0, i1, s*(1-t)),
+                                 (j1, i0, (1-s)*t),    (j1, i1, s*t)]:
+                if 0 <= jj <= res_y and 0 <= ii < res_x:
+                    state.fluid_u_y[jj, ii] += w * vy
+                    self._u_y_weights[jj, ii] += w
+
+        # normalize by accumulated weights
+        mask_x = self._u_x_weights > 0
+        state.fluid_u_x[mask_x] /= self._u_x_weights[mask_x]
+        mask_y = self._u_y_weights > 0
+        state.fluid_u_y[mask_y] /= self._u_y_weights[mask_y]
+
+        # track which edges have valid (water-influenced) velocity
+        self._valid_u_x = mask_x
+        self._valid_u_y = mask_y
 
     def _voxel_out_of_domain(self, ix: int, iy: int) -> bool:
         """Check if a voxel coordinate is out of the fluid domain."""
