@@ -1,0 +1,7 @@
+solver:
+  type: fluid_flip
+  timestep: 0.005  # timestep size
+
+fluid:
+  initial_file: "scene01.txt"
+  cell_size: 0.005

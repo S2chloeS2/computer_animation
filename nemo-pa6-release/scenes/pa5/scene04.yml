@@ -1,0 +1,26 @@
+solver:
+  type: large_step_cloth
+
+  timestep: 0.005   # timestep size
+
+shapes:
+  - type: cloth
+    # when relative path is given, the relative path is w.r.t. the current 
+    # directory of this .yml file
+    file: "../meshes/cloth_17x17.obj"
+    pos: [0.0, 0.0, 2.50001]
+    orient: [0.70710678118, 0.70710678118, 0.0, 0.0]
+    scale: 0.8
+    density: 1.0
+    # parameters for stretch energy: 
+    # First value is stretch stiffness
+    # Second value is stretch damping coefficient
+    stretch_params: [8000., 0.5] # optional
+    # parameters for stretch energy: 
+    # First value is shear stiffness
+    # Second value is shear damping coefficient
+    shear_params: [1000., 0.5] # optional
+    # parameters for bending energy: 
+    bending_params: [0.01, 0.0001] # optional
+    # indices of fixed vertices on the cloth
+    fixed: [0, 19]

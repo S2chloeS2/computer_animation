@@ -1,0 +1,68 @@
+solver:
+  # solver type. Choose from
+  # - contact_penalty
+  type: lcp_gs
+
+  timestep: 0.0005   # timestep size
+
+  # damping for particle-partcile contact penalty force (optional)
+  particle_contact_penalty_damping: 0.01
+  particle_contact_penalty_stiffness: 1000.
+
+  # Time integrator type. Choose from
+  # - symplectic
+  # - midpoint
+  integrator: symplectic
+
+shapes:
+  - type: box
+    pos: [0.5, 0.5, 1.0]
+    size: [2.0, 2.0, 1.0]
+    density: 2.0
+    penalty_stiffness: 4000.
+    penalty_damping: 0.5
+    fixed: False # optional. Default is False
+
+  - type: mesh
+    # when relative path is given, the relative path is w.r.t. the current 
+    # directory of this .yml file
+    file: "../meshes/torus.obj"
+    pos: [0.0, 0.0, 2.5001]
+    scale: 0.8
+    penalty_stiffness: 2000.
+    penalty_damping: 0.9
+    density: 2.0
+
+  - type: cylinder
+    pos: [-0.5, 0.5, 4.0]
+    radius: 0.5
+    length: 2.4 # cylinder length
+    # rotate cylinder by 45 along x
+    orient: [0.9238795325112867, 0.3826834323650898, 0.0, 0.0] # quaternion (scalar first) 
+    penalty_stiffness: 4000.
+    penalty_damping: 0.5
+
+  - type: half_space_plane
+    normal: [0.0, 0.2, 1]
+    offset: 0.0
+    penalty_stiffness: 1000.
+    penalty_damping: 0.05
+    
+  - type: half_space_plane
+    normal: [0, -0.2, 1]
+    offset: 0.0
+    penalty_stiffness: 1000.
+    penalty_damping: 0.05
+
+  - type: half_space_plane
+    normal: [0.2, 0.0, 1]
+    offset: 0.0
+    penalty_stiffness: 1000.
+    penalty_damping: 0.05
+    
+  - type: half_space_plane
+    normal: [-0.2, 0.0, 1]
+    offset: 0.0
+    penalty_stiffness: 1000.
+    penalty_damping: 0.05
+    
