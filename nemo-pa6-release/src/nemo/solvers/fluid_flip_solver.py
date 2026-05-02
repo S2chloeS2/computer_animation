@@ -189,39 +189,96 @@ class FluidFlipSolver(SolverBase):
 
 
         # Construct the non-zero elements of the pressure solve linear system.
-        # ...
-        
-        # After collecting the non-zero elements, you need to construct the sparse matrix and solve the linear system.
-        # Here I simply use scipy's sparse matrix construction to construct the linear system.
-        # see: https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csc_matrix.html
+        dt = self.dt
+        k = 0
+        for i in range(self._n_water_voxels):
+            ix = self._index2voxel[i, 0]
+            iy = self._index2voxel[i, 1]
+            diag = 0
+            for nx, ny in [(ix - 1, iy), (ix + 1, iy), (ix, iy - 1), (ix, iy + 1)]:
+                if self._voxel_out_of_domain(nx, ny):
+                    # SOLID wall: no flux, no contribution
+                    pass
+                elif self._voxel_type[ny, nx] == VoxelType.WATER:
+                    # WATER neighbor: off-diagonal -1
+                    j = self._voxel2index[ny, nx]
+                    self._pressure_A_rows[k] = i
+                    self._pressure_A_cols[k] = j
+                    self._pressure_A_vals[k] = -1.0
+                    k += 1
+                    diag += 1
+                else:
+                    # AIR neighbor: pressure=0 free surface → increases diagonal
+                    diag += 1
+            # diagonal entry
+            self._pressure_A_rows[k] = i
+            self._pressure_A_cols[k] = i
+            self._pressure_A_vals[k] = float(diag)
+            k += 1
 
-        # A = sp.csc_matrix(
-        #     (self._pressure_A_vals[:nnz], (self._pressure_A_rows[:nnz], self._pressure_A_cols[:nnz])),
-        #     shape=(self._n_water_voxels, self._n_water_voxels),
-        # )
+            # RHS: -divergence * (dx / dt)
+            div = (state.fluid_u_x[iy, ix + 1] - state.fluid_u_x[iy, ix]
+                   + state.fluid_u_y[iy + 1, ix] - state.fluid_u_y[iy, ix])
+            self._pressure_rhs[i] = -(dx / dt) * div
 
-        # Here I use incomplete LU (ILU) preconditioner to speed up the conjugate gradient (CG) solve.
-        # ILU preconditioner
-        # ilu = spla.spilu(A, drop_tol=1e-4, fill_factor=5)
-        # M = spla.LinearOperator(A.shape, ilu.solve)
-        # # solve the linear system
-        # p, info = spla.cg(
-        #     A,
-        #     self._pressure_rhs[: self._n_water_voxels],
-        #     M=M,
-        #     maxiter=100,
-        #     x0=self._p0[: self._n_water_voxels],
-        #     # callback=callback,
-        # )
-        # if info > 0:
-        #     rprint(f"[red]Warning:[/red] Pressure solve not converge (its = {info})")
-        # elif info < 0:
-        #     rprint("[red]Error:[/red] Pressure solve failed")
+        if self._n_water_voxels == 0:
+            return
 
-        # After the pressure solve, correct grid velocity due to pressure gradient
-        # You also cache the pressure values by updating the _last_pressure array.
-        # The cached pressure values can be used for warm start the next pressure solve.
-        # (see x0 argument above in spla.cg)
+        A = sp.csc_matrix(
+            (self._pressure_A_vals[:k], (self._pressure_A_rows[:k], self._pressure_A_cols[:k])),
+            shape=(self._n_water_voxels, self._n_water_voxels),
+        )
+
+        # warm-start from last frame's pressure
+        self._p0[: self._n_water_voxels] = 0.0
+        for i in range(self._n_water_voxels):
+            ix, iy = self._index2voxel[i, 0], self._index2voxel[i, 1]
+            self._p0[i] = self._last_pressure[iy, ix]
+
+        ilu = spla.spilu(A, drop_tol=1e-4, fill_factor=5)
+        M = spla.LinearOperator(A.shape, ilu.solve)
+        p, info = spla.cg(
+            A,
+            self._pressure_rhs[: self._n_water_voxels],
+            M=M,
+            maxiter=100,
+            x0=self._p0[: self._n_water_voxels],
+        )
+        if info > 0:
+            rprint(f"[red]Warning:[/red] Pressure solve not converge (its = {info})")
+        elif info < 0:
+            rprint("[red]Error:[/red] Pressure solve failed")
+
+        # cache pressure for next frame warm-start
+        self._last_pressure.fill(0.0)
+        for i in range(self._n_water_voxels):
+            ix, iy = self._index2voxel[i, 0], self._index2voxel[i, 1]
+            self._last_pressure[iy, ix] = p[i]
+
+        # correct grid velocities with pressure gradient: u -= (dt/dx) * grad(p)
+        scale = dt / dx
+        res_x = int(self.model.fluid_domain_res[0])
+        res_y = int(self.model.fluid_domain_res[1])
+
+        # u_x[iy, ix]: between cell (ix-1, iy) and (ix, iy)
+        for ix in range(1, res_x):
+            for iy in range(res_y):
+                left  = self._voxel_type[iy, ix - 1] == VoxelType.WATER
+                right = self._voxel_type[iy, ix]     == VoxelType.WATER
+                if left or right:
+                    p_right = p[self._voxel2index[iy, ix]]     if right else 0.0
+                    p_left  = p[self._voxel2index[iy, ix - 1]] if left  else 0.0
+                    state.fluid_u_x[iy, ix] -= scale * (p_right - p_left)
+
+        # u_y[iy, ix]: between cell (ix, iy-1) and (ix, iy)
+        for ix in range(res_x):
+            for iy in range(1, res_y):
+                below = self._voxel_type[iy - 1, ix] == VoxelType.WATER
+                above = self._voxel_type[iy,     ix] == VoxelType.WATER
+                if below or above:
+                    p_above = p[self._voxel2index[iy,     ix]] if above else 0.0
+                    p_below = p[self._voxel2index[iy - 1, ix]] if below else 0.0
+                    state.fluid_u_y[iy, ix] -= scale * (p_above - p_below)
 
     def _transfer_grid_velocity_to_particles(self, par_voxel_coord: nparray, state_in: State, state_out: State):
         model = self.model
