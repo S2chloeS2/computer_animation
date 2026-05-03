@@ -1,0 +1,28 @@
+solver:
+  type: symplectic_euler
+  timestep: 0.001
+  gravity: -9.81
+
+plot:
+  particle_id: 0
+  dof: 2
+  y_range: [-5.0, 2.0]
+
+# Single particle with drag to test drag force implementation
+particles:
+  - pos: [0, 0, 1.5]
+    vel: [2, 0, 0]
+    fixed: false
+    mass: 1.0
+    drag: 0.5
+
+  - pos: [0, 0, 0]
+    vel: [0, 0, 0]
+    fixed: true
+    mass: 1.0
+
+springs:
+  - particle_ids: [0, 1]
+    stiffness: 20.0
+    damping: 0.3
+    rest_length: 1.0
