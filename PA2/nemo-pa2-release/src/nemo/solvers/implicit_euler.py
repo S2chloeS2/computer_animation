@@ -24,8 +24,14 @@ class ImplicitEulerSolver(SolverBase):
         mask = self.model.particle_flags & ParticleFlags.ACTIVE.value != 0
         self.masked_mass = np.where(mask, self.model.particle_mass, 0.0)
         self.M = np.diag(np.repeat(np.where(mask, self.model.particle_mass, 1), 3))
-        # NOTE: Feel free to add any additional initialization here
-        #       to ease your implementation.
+        # precompute fixed DOF indices once to avoid recomputing every Newton step
+        N = self.model.particle_count
+        self.fixed_dofs = [
+            3 * i + d
+            for i in range(N)
+            if self.model.particle_flags[i] & ParticleFlags.ACTIVE.value == 0
+            for d in range(3)
+        ]
 
     @override
     def step(self, state_in: State, state_out: State, dt: float | None = None):
@@ -36,14 +42,6 @@ class ImplicitEulerSolver(SolverBase):
             dt = self.dt
         self.ts += dt
         N = self.model.particle_count
-
-        # precompute fixed-DOF indices once
-        fixed_dofs = [
-            3 * i + d
-            for i in range(N)
-            if self.model.particle_flags[i] & ParticleFlags.ACTIVE.value == 0
-            for d in range(3)
-        ]
 
         # initial guess: v₀ = q̇ⁿ
         v = state_in.particle_qd.copy()   # shape (N, 3)
@@ -70,7 +68,7 @@ class ImplicitEulerSolver(SolverBase):
             b = -Mv_diff + dt * tmp_state.particle_f.reshape(-1)
 
             # enforce fixed particles
-            for idx in fixed_dofs:
+            for idx in self.fixed_dofs:
                 A_mat[idx, :] = 0.0
                 A_mat[:, idx] = 0.0
                 A_mat[idx, idx] = 1.0
