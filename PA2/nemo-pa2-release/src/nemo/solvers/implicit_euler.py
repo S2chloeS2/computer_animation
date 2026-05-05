@@ -15,7 +15,7 @@ class ImplicitEulerSolver(SolverBase):
         super().__init__(model=model, dt=dt)
         # Maximum number of iterations for the implicit Euler solver
         # Here we use 5 as the default value
-        self.maxits = 5
+        self.maxits = 10
         # This is the error tolerance to determine when to terminate
         # the Newton iteration. If the residual f(x) is less than the
         # toleration, i.e., |f9x)| < sol, then we terminate the ieration.
