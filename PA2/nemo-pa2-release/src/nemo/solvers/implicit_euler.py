@@ -19,7 +19,7 @@ class ImplicitEulerSolver(SolverBase):
         # This is the error tolerance to determine when to terminate
         # the Newton iteration. If the residual f(x) is less than the
         # toleration, i.e., |f9x)| < sol, then we terminate the ieration.
-        self.tol = 1e-4
+        self.tol = 1e-6
 
         mask = self.model.particle_flags & ParticleFlags.ACTIVE.value != 0
         self.masked_mass = np.where(mask, self.model.particle_mass, 0.0)
