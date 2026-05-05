@@ -33,6 +33,8 @@ class LinearizedImplicitSolver(SolverBase):
         self.ts += dt
         N = self.model.particle_count
 
+        # Linearized implicit Euler: linearize F around (q*, q̇ⁿ) to get one-shot solve
+        # instead of full Newton iteration. Cheaper but less accurate for stiff systems.
         # Step 1: build tentative state at q* = qⁿ + h·q̇ⁿ, q̇ = q̇ⁿ
         tmp_state = self.model.state()
         tmp_state.particle_q  = state_in.particle_q  + dt * state_in.particle_qd
