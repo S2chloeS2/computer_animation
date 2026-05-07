@@ -171,6 +171,7 @@ def eval_gravitational_force_pos_jacobians(model: Model, state: State, A: nparra
         nnT = np.outer(nhat, nhat)
 
         # K = -(G·m₀·m₁ / l³) · (I - 3·n̂n̂ᵀ)
+        # derived from d/dq[-G*m*m'/r^2 * n̂]: radial component cancels, leaves rank-2 tensor
         K = -(G * model.particle_mass[i] * model.particle_mass[j] / nrm**3) * (np.eye(3) - 3 * nnT)
 
         i_active = model.particle_flags[i] & ParticleFlags.ACTIVE.value != 0
