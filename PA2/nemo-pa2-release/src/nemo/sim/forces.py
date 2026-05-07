@@ -18,7 +18,7 @@ def eval_spring_forces(model: Model, state: State) -> None:
         # relative dir of i w.r.t. j;  vec(j-->i)
         dir = state.particle_q[i] - state.particle_q[j]
         nrm = np.linalg.norm(dir)  # distance
-        if nrm > 1e-10:
+        if nrm > 1e-8:
             # damping force: d * v
             # relative vel of i w.r.t. j
             dir /= nrm  # normalize the direction
