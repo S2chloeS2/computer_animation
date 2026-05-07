@@ -1,0 +1,27 @@
+solver:
+  # Use implicit euler for stiff spring - explicit would be unstable here
+  type: implicit_euler
+  timestep: 0.01
+  gravity: -9.81
+
+plot:
+  particle_id: 1
+  dof: 2
+  y_range: [-3.0, 1.5]
+
+particles:
+  - pos: [0, 0, 0]
+    vel: [0, 0, 0]
+    fixed: true
+    mass: 1.0
+
+  - pos: [0, 0, -1.0]
+    vel: [1.0, 0, 0]
+    fixed: false
+    mass: 0.5
+
+springs:
+  - particle_ids: [0, 1]
+    stiffness: 5000.0
+    damping: 1.0
+    rest_length: 1.0
