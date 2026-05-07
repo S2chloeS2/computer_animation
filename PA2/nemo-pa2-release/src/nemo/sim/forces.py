@@ -60,7 +60,9 @@ def eval_spring_force_pos_jacobians(model: Model, state: State, A: nparray, scal
         ke = model.spring_stiffness[s]
         l0 = model.spring_rest_length[s]
 
-        # elastic K: -k * (nnT + (l-l0)/l * (I - nnT))
+        # elastic K: dF_i/dq_i = -k * [n̂n̂ᵀ + (l-l₀)/l * (I - n̂n̂ᵀ)]
+        # first term: stiffness along spring axis
+        # second term: geometric stiffness (restoring torque when spring is stretched)
         K = -ke * (nnT + (nrm - l0) / nrm * (np.eye(3) - nnT))
 
         # damping contribution to K
