@@ -134,7 +134,8 @@ def eval_gravitational_forces(model: Model, state: State) -> None:
         i, j = model.gravitational_pairs[g]
         dir = state.particle_q[i] - state.particle_q[j]  # vector from j to i
         nrm = np.linalg.norm(dir)
-        if nrm > 1e-10:
+        # guard against near-zero distance to avoid singularity in 1/r^2
+        if nrm > 1e-8:
             f_g = dir * (model.gravitational_constant[g] * model.particle_mass[i] * model.particle_mass[j] / nrm**3)
             if model.particle_flags[i] & ParticleFlags.ACTIVE.value != 0:
                 state.particle_f[i] -= f_g
