@@ -9,7 +9,7 @@ from rich import print as rprint
 # zip file will be named as FOLDER_NAME_PA_ID.zip
 
 PA_ID = "pa2"
-FOLDER_NAME = "nemo"
+FOLDER_NAME = "nemo-pa2"
 
 
 def create_zip_ignoring_gitignore(zip_filename, source_dir):
