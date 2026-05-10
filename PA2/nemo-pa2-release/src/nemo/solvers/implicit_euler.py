@@ -82,6 +82,6 @@ class ImplicitEulerSolver(SolverBase):
             if np.linalg.norm(delta_v) < self.tol:
                 break
 
-        # write final state
+        # write final state: position update uses converged velocity (symplectic-like)
         state_out.particle_qd = v
         state_out.particle_q  = state_in.particle_q + dt * v
