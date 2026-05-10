@@ -211,7 +211,8 @@ class Model:
         if self.fluid_domain_res is not None:
             s.fluid_u_x = np.zeros((self.fluid_domain_res[1], self.fluid_domain_res[0] + 1), dtype=np.float64)
             s.fluid_u_y = np.zeros((self.fluid_domain_res[1] + 1, self.fluid_domain_res[0]), dtype=np.float64)
-            self.initialize_fluid_particles(s)
+            if self.init_fluid_map is not None:
+                self.initialize_fluid_particles(s)
         return s
 
     def initialize_fluid_particles(self, state: State) -> None:

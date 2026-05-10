@@ -93,9 +93,9 @@ class FluidFlipSolver(SolverBase):
 
         # RHS of the pressure solve linear system
         self._pressure_rhs = np.empty(sz, dtype=np.float64)
-        self._last_pressure = np.empty((model.fluid_domain_res[1], model.fluid_domain_res[0]), dtype=np.float64)
+        self._last_pressure = np.zeros((model.fluid_domain_res[1], model.fluid_domain_res[0]), dtype=np.float64)
         # To store the pressure value at the last timestep
-        self._p0 = np.empty(sz, dtype=np.float64)
+        self._p0 = np.zeros(sz, dtype=np.float64)
         # To store the pressure initialization
         # LHS of the pressure solve linear system (sparse matrix)
         self._pressure_A_rows = np.empty(sz, dtype=np.int32)  # row indices of nonzero elements
@@ -164,6 +164,18 @@ class FluidFlipSolver(SolverBase):
         # track which edges have valid (water-influenced) velocity
         self._valid_u_x = mask_x
         self._valid_u_y = mask_y
+
+        # enforce solid-wall boundary: boundary edges must be zero (no penetration)
+        state.fluid_u_x[:, 0] = 0.0   # left wall
+        state.fluid_u_x[:, -1] = 0.0  # right wall
+        state.fluid_u_y[0, :] = 0.0   # bottom wall
+        state.fluid_u_y[-1, :] = 0.0  # top wall
+
+        # also exclude boundary edges from valid mask so they don't affect extrapolation
+        self._valid_u_x[:, 0] = False
+        self._valid_u_x[:, -1] = False
+        self._valid_u_y[0, :] = False
+        self._valid_u_y[-1, :] = False
 
     def _voxel_out_of_domain(self, ix: int, iy: int) -> bool:
         """Check if a voxel coordinate is out of the fluid domain."""
@@ -235,14 +247,18 @@ class FluidFlipSolver(SolverBase):
             ix, iy = self._index2voxel[i, 0], self._index2voxel[i, 1]
             self._p0[i] = self._last_pressure[iy, ix]
 
-        ilu = spla.spilu(A, drop_tol=1e-4, fill_factor=5)
-        M = spla.LinearOperator(A.shape, ilu.solve)
+        try:
+            ilu = spla.spilu(A, drop_tol=1e-5, fill_factor=10)
+            M = spla.LinearOperator(A.shape, ilu.solve)
+        except RuntimeError:
+            M = None
         p, info = spla.cg(
             A,
             self._pressure_rhs[: self._n_water_voxels],
             M=M,
-            maxiter=100,
+            maxiter=1000,
             x0=self._p0[: self._n_water_voxels],
+            atol=1e-6,
         )
         if info > 0:
             rprint(f"[red]Warning:[/red] Pressure solve not converge (its = {info})")
@@ -280,7 +296,7 @@ class FluidFlipSolver(SolverBase):
                     p_below = p[self._voxel2index[iy - 1, ix]] if below else 0.0
                     state.fluid_u_y[iy, ix] -= scale * (p_above - p_below)
 
-    def _transfer_grid_velocity_to_particles(self, par_voxel_coord: nparray, state_in: State, state_out: State):
+    def _transfer_grid_velocity_to_particles(self, par_voxel_coord: nparray, old_u_x: nparray, old_u_y: nparray, state_in: State, state_out: State):
         model = self.model
 
         dx = model.fluid_cell_size
@@ -288,8 +304,8 @@ class FluidFlipSolver(SolverBase):
         # extrapolate grid velocities into air voxels to avoid zero-velocity contamination
         u_x_now = extrapolate_velocity_field(state_out.fluid_u_x, self._valid_u_x)
         u_y_now = extrapolate_velocity_field(state_out.fluid_u_y, self._valid_u_y)
-        u_x_old = extrapolate_velocity_field(state_in.fluid_u_x, self._valid_u_x)
-        u_y_old = extrapolate_velocity_field(state_in.fluid_u_y, self._valid_u_y)
+        u_x_old = extrapolate_velocity_field(old_u_x, self._valid_u_x)
+        u_y_old = extrapolate_velocity_field(old_u_y, self._valid_u_y)
 
         n_particles = state_out.fluid_particle_q.shape[0]
         for p in range(n_particles):
@@ -374,9 +390,9 @@ class FluidFlipSolver(SolverBase):
                     idx += 1
         self._n_water_voxels = idx
 
-        # 2.2 copy grid velocity into state_in for FLIP (old velocity reference)
-        state_in.fluid_u_x = state_out.fluid_u_x.copy()
-        state_in.fluid_u_y = state_out.fluid_u_y.copy()
+        # 2.2 save old grid velocity as local variable for FLIP (avoid mutating state_in)
+        old_u_x = state_out.fluid_u_x.copy()
+        old_u_y = state_out.fluid_u_y.copy()
 
         # 3. apply gravity to u_y edges adjacent to at least one WATER voxel
         for ix in range(res_x):
@@ -389,4 +405,4 @@ class FluidFlipSolver(SolverBase):
         self._pressure_projection(state_out)
 
         # 5. grid-to-particle transfer with PIC/FLIP blend (Step 4)
-        self._transfer_grid_velocity_to_particles(par_voxel_coord, state_in, state_out)
+        self._transfer_grid_velocity_to_particles(par_voxel_coord, old_u_x, old_u_y, state_in, state_out)
