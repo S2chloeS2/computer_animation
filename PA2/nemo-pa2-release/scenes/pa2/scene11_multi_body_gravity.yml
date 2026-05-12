@@ -1,0 +1,35 @@
+solver:
+  type: linearized_implicit
+  timestep: 0.005
+  gravity: 0.0
+
+plot:
+  particle_id: 0
+  dof: 0
+  y_range: [-3.0, 3.0]
+
+# Three-body gravitational simulation
+# Tests gravitational force with multiple pairs
+particles:
+  - pos: [1.5, 0, 0]
+    vel: [0, 0.8, 0]
+    fixed: false
+    mass: 2.0
+
+  - pos: [-1.5, 0, 0]
+    vel: [0, -0.8, 0]
+    fixed: false
+    mass: 2.0
+
+  - pos: [0, 0, 2.0]
+    vel: [0.5, 0, 0]
+    fixed: false
+    mass: 1.0
+
+gravitational:
+  - particle_ids: [0, 1]
+    G: 50.0
+  - particle_ids: [0, 2]
+    G: 30.0
+  - particle_ids: [1, 2]
+    G: 30.0
