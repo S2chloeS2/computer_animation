@@ -69,5 +69,6 @@ class LinearizedImplicitSolver(SolverBase):
         delta_qd = np.linalg.solve(A_mat, b)
 
         # Step 4: update velocity and position
+        # q̇ⁿ⁺¹ = q̇ⁿ + δq̇,  qⁿ⁺¹ = qⁿ + h·q̇ⁿ⁺¹  (implicit position update)
         state_out.particle_qd = state_in.particle_qd + delta_qd.reshape(N, 3)
         state_out.particle_q  = state_in.particle_q  + dt * state_out.particle_qd
