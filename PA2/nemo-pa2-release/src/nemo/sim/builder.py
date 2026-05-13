@@ -58,6 +58,13 @@ class ModelBuilder:
         """
         return len(self.spring_rest_length)
 
+    @property
+    def gravitational_count(self) -> int:
+        """
+        The number of gravitational pairs in the model.
+        """
+        return len(self.gravitational_constant)
+
     # particles
     def add_particle(
         self,
