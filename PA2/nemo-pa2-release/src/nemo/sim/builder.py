@@ -151,7 +151,7 @@ class ModelBuilder:
         self.particle_flags.extend(flags)
         self.particle_drag.extend(drag)
 
-    def add_spring(self, i: int, j, ke: float, kd: float | None = None, rest_length: float | None = None):
+    def add_spring(self, i: int, j: int, ke: float, kd: float | None = None, rest_length: float | None = None):
         """Adds a spring between two particles in the system
 
         Args:
@@ -168,6 +168,8 @@ class ModelBuilder:
             based on the distance between the particles in their initial
             configuration.
         """
+        if i == j:
+            raise RuntimeError(f"Spring cannot connect a particle to itself (index {i})")
         self.spring_indices.append(i)
         self.spring_indices.append(j)
         self.spring_stiffness.append(ke)
