@@ -211,10 +211,10 @@ def eval_drag_force_vel_jacobians(model: Model, state: State, A: nparray, scale:
         A: nparray, shape (particle_countx3, particle_countx3): output array for the jacobians
         s: float: the scalar to scale the Jacobian before adding to A
     """
-    for i in range(model.particle_count):
+    active = (model.particle_flags & ParticleFlags.ACTIVE.value) != 0
+    for i in np.where(active & (model.particle_drag > 0))[0]:
         beta = model.particle_drag[i]
-        if beta > 0 and model.particle_flags[i] & ParticleFlags.ACTIVE.value != 0:
-            A[i * 3 : (i + 1) * 3, i * 3 : (i + 1) * 3] -= np.eye(3) * (scale * beta)
+        A[i * 3 : (i + 1) * 3, i * 3 : (i + 1) * 3] -= np.eye(3) * (scale * beta)
 
 
 def eval_all_forces(model: Model, state: State) -> None:
