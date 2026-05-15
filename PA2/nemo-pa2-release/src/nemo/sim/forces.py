@@ -190,10 +190,12 @@ def eval_drag_forces(model: Model, state: State) -> None:
     Evaluate the drag forces of the given model, and store the forces
     in `state.particle_f`
     """
-    for i in range(model.particle_count):
-        beta = model.particle_drag[i]
-        if beta > 0 and model.particle_flags[i] & ParticleFlags.ACTIVE.value != 0:
-            state.particle_f[i] -= state.particle_qd[i] * beta
+    active = (model.particle_flags & ParticleFlags.ACTIVE.value) != 0
+    has_drag = model.particle_drag > 0
+    mask = active & has_drag
+    if np.any(mask):
+        beta = model.particle_drag[mask, np.newaxis]
+        state.particle_f[mask] -= state.particle_qd[mask] * beta
 
 
 def eval_drag_force_vel_jacobians(model: Model, state: State, A: nparray, scale: float = 1.0) -> None:
