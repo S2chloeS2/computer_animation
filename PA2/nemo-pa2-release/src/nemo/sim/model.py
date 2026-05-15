@@ -64,3 +64,10 @@ class Model:
             s.particle_qd = self.particle_qd.copy()
             s.particle_f = np.zeros_like(self.particle_qd)
         return s
+
+    def __repr__(self) -> str:
+        return (
+            f"Model(particles={self.particle_count}, "
+            f"springs={self.spring_count}, "
+            f"gravitational_pairs={self.gravitational_count})"
+        )
