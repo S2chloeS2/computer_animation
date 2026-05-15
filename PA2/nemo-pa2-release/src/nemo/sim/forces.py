@@ -24,6 +24,8 @@ def eval_spring_forces(model: Model, state: State) -> None:
             dir /= nrm  # normalize the direction
             f_s = dir * ((model.spring_rest_length[s] - nrm) * model.spring_stiffness[s])
             if model.spring_damping[s] > 0:
+                # damping acts along spring axis: F_d = kd * (v_rel · n̂) * n̂
+                # subtract because damping opposes relative motion
                 f_d = dir * np.dot(state.particle_qd[i] - state.particle_qd[j], dir) * model.spring_damping[s]
                 f_tot = f_s - f_d
             else:
