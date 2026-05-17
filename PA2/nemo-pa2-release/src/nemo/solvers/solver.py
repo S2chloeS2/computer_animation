@@ -12,6 +12,9 @@ class SolverBase:
         self.ts = 0.0
         """Accumulated time that has been stepped"""
 
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(dt={self.dt}, ts={self.ts:.4f})"
+
     def step(self, state_in: State, state_out: State, dt: float | None = None):
         """
         Simulate the model for a given time step.
