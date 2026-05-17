@@ -35,3 +35,16 @@ def test_gravitational_forces():
     eval_gravitational_forces(model, state)
     assert np.all(state.particle_f[0] == np.array([1.0, 0.0, 0.0]))
     assert np.all(state.particle_f[1] == np.array([-1.0, 0.0, 0.0]))
+
+
+def test_spring_forces_with_damping():
+    builder = ModelBuilder(gravity=0.0)
+    # particle 0 fixed, particle 1 moving away at vel 1 m/s
+    builder.add_particle(pos=(0, 0, 0), vel=(0, 0, 0), mass=1.0, flags=0)
+    builder.add_particle(pos=(1, 0, 0), vel=(1.0, 0, 0), mass=1.0)
+    builder.add_spring(0, 1, ke=0.0, kd=2.0, rest_length=1.0)
+    model = builder.finalize()
+    state = model.state()
+    eval_spring_forces(model, state)
+    # only damping: F_d = kd * (v_rel · n̂) = 2.0 * 1.0 = 2.0, opposes motion -> -x
+    assert np.allclose(state.particle_f[1], np.array([-2.0, 0.0, 0.0]))
