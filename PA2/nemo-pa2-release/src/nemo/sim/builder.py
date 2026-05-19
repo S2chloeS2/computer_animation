@@ -226,10 +226,9 @@ class ModelBuilder:
         m.particle_radius = np.array(self.particle_radius, dtype=np.float64)
         m.particle_flags = np.array(self.particle_flags, dtype=np.int32)
         m.particle_drag = np.array(self.particle_drag, dtype=np.float64)
-        # For fixed particles, ensure the velocity to be zero
-        for i in range(self.particle_count):
-            if m.particle_flags[i] & ParticleFlags.ACTIVE.value == 0:
-                m.particle_qd[i] = np.zeros(3)
+        # zero out velocity of fixed particles (they should never move)
+        fixed_mask = (m.particle_flags & ParticleFlags.ACTIVE.value) == 0
+        m.particle_qd[fixed_mask] = 0.0
 
         # ---------------------
         # springs
