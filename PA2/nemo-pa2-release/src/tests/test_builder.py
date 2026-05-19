@@ -88,3 +88,17 @@ def test_builder_springs():
     assert m.spring_rest_length[0] == 1.0
     assert m.spring_rest_length[1] == 0.0
     assert m.spring_rest_length[3] == 1.2
+
+
+def test_builder_self_spring_raises():
+    builder = ModelBuilder()
+    builder.add_particle(pos=(0, 0, 0), vel=(0, 0, 0), mass=1.0)
+    with pytest.raises(RuntimeError):
+        builder.add_spring(0, 0, ke=10.0)
+
+
+def test_builder_fixed_particle_velocity_zeroed():
+    builder = ModelBuilder()
+    builder.add_particle(pos=(0, 0, 0), vel=(5.0, 3.0, 1.0), mass=1.0, flags=0)
+    m = builder.finalize()
+    assert np.allclose(m.particle_qd[0], [0.0, 0.0, 0.0])
