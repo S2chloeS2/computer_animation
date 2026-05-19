@@ -24,3 +24,12 @@ class State:
         """
         if self.particle_f is not None:
             self.particle_f.fill(0)
+
+    def kinetic_energy(self, model) -> float:
+        """Compute total kinetic energy: sum of 0.5 * m * ||v||^2 over active particles."""
+        import numpy as np
+        from ..geometry import ParticleFlags
+        active = (model.particle_flags & ParticleFlags.ACTIVE.value) != 0
+        v = self.particle_qd[active]
+        m = model.particle_mass[active]
+        return float(0.5 * np.sum(m * np.sum(v ** 2, axis=1)))
