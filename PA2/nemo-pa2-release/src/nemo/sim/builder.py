@@ -189,6 +189,8 @@ class ModelBuilder:
             j: The index of the second particle
             G: The gravitational constant
         """
+        if i == j:
+            raise RuntimeError(f"Gravitational pair cannot reference the same particle (index {i})")
         self.gravitational_pairs.append(i)
         self.gravitational_pairs.append(j)
         self.gravitational_constant.append(G)
