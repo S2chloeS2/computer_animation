@@ -19,7 +19,7 @@ from rich import print as rprint
 # while ignoring files specified in .gitignore
 # zip file will be named as FOLDER_NAME_PA_ID.zip
 
-PA_ID = "pa1"
+PA_ID = "pa6"
 FOLDER_NAME = "nemo"
 
 
