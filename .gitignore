@@ -213,3 +213,12 @@ __marimo__/
 *.fdb_latexmk
 .polyscope.ini
 .DS_Store
+
+# Submission zip archives
+*.zip
+
+# Claude Code AI session files
+.ai/
+
+# imgui layout cache
+imgui.ini
