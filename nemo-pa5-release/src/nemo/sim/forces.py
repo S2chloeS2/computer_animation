@@ -424,6 +424,9 @@ def eval_cloth_stretch_shear_forces(model: Model, state: State, A: SparseParticl
                             blk = np.outer(gui, guj) + np.outer(gvi, gvj)
                         else:
                             blk = np.outer(guj, gui) + np.outer(gvj, gvi)
+                        coeff_u2 = d_u[idx_i] * d_u[idx_j] / wu_n
+                        coeff_v2 = d_v[idx_i] * d_v[idx_j] / wv_n
+                        blk += C_u * coeff_u2 * I_wu + C_v * coeff_v2 * I_wv
                         A.accumu_block(i_idx, j_idx, h2aks * blk)
 
             # ----------------------------------------------------------------
