@@ -358,11 +358,13 @@ def eval_cloth_stretch_shear_forces(model: Model, state: State, A: SparseParticl
         if t2_active:
             state.particle_f[t2] -= shear_scale * gs2
 
-        # Shear Jacobian: +h² * a * kr * outer(gs_i, gs_j)  for i≤j, both active
+        # Shear Jacobian:
+        #   outer product term:      +h² * a * kr * outer(gs_i, gs_j)
+        #   second derivative term:  +h² * a * kr * C * (d_u[i]*d_v[j] + d_v[i]*d_u[j]) * I
         h2akr = h2 * a * kr
         verts = [(t0, gs0, t0_active), (t1, gs1, t1_active), (t2, gs2, t2_active)]
         for idx_i, (ti, gi, ai) in enumerate(verts):
-            for tj, gj, aj in verts[idx_i:]:
+            for idx_j, (tj, gj, aj) in enumerate(verts[idx_i:], start=idx_i):
                 if ai and aj:
                     i_idx, j_idx = (ti, tj) if ti <= tj else (tj, ti)
                     gi_ord, gj_ord = (gi, gj) if ti <= tj else (gj, gi)
