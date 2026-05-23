@@ -404,15 +404,20 @@ def eval_cloth_stretch_shear_forces(model: Model, state: State, A: SparseParticl
             if t2_active:
                 state.particle_f[t2] -= aks * (C_u * gu2 + C_v * gv2)
 
-            # Stretch Jacobian: +h² * a * ks * (outer(gu_i,gu_j) + outer(gv_i,gv_j))
+            # Stretch Jacobian:
+            #   outer product term:      +h² * a * ks * (outer(gu_i,gu_j) + outer(gv_i,gv_j))
+            #   second derivative term:  +h² * a * ks * C_u * d_u[i]*d_u[j]/wu_n * (I - wu_hat⊗wu_hat)
+            #                           +h² * a * ks * C_v * d_v[i]*d_v[j]/wv_n * (I - wv_hat⊗wv_hat)
             h2aks = h2 * aks
+            I_wu = I3d - np.outer(wu_hat, wu_hat)
+            I_wv = I3d - np.outer(wv_hat, wv_hat)
             stretch_verts = [
                 (t0, gu0, gv0, t0_active),
                 (t1, gu1, gv1, t1_active),
                 (t2, gu2, gv2, t2_active),
             ]
             for idx_i, (ti, gui, gvi, ai) in enumerate(stretch_verts):
-                for tj, guj, gvj, aj in stretch_verts[idx_i:]:
+                for idx_j, (tj, guj, gvj, aj) in enumerate(stretch_verts[idx_i:], start=idx_i):
                     if ai and aj:
                         i_idx, j_idx = (ti, tj) if ti <= tj else (tj, ti)
                         if ti <= tj:
