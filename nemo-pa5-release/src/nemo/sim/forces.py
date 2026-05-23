@@ -328,6 +328,11 @@ def eval_cloth_stretch_shear_forces(model: Model, state: State, A: SparseParticl
         w_u = wuv[:, 0]
         w_v = wuv[:, 1]
 
+        # Scalar d-coefficients: vertex i contributes d_u[i]*I to ∂w_u/∂x_i
+        d_u = [-(d[0, 0] + d[1, 0]), d[0, 0], d[1, 0]]
+        d_v = [-(d[0, 1] + d[1, 1]), d[0, 1], d[1, 1]]
+        I3d = np.eye(3)
+
         # ----------------------------------------------------------------
         # Shear Force (eq 1.10–1.12, no damping yet)
         # C = w_u^T * w_v   (no area)
