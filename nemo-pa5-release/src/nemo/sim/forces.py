@@ -368,7 +368,9 @@ def eval_cloth_stretch_shear_forces(model: Model, state: State, A: SparseParticl
                 if ai and aj:
                     i_idx, j_idx = (ti, tj) if ti <= tj else (tj, ti)
                     gi_ord, gj_ord = (gi, gj) if ti <= tj else (gj, gi)
-                    A.accumu_block(i_idx, j_idx, h2akr * np.outer(gi_ord, gj_ord))
+                    coeff2 = d_u[idx_i] * d_v[idx_j] + d_v[idx_i] * d_u[idx_j]
+                    blk = np.outer(gi_ord, gj_ord) + C_shear * coeff2 * I3d
+                    A.accumu_block(i_idx, j_idx, h2akr * blk)
 
         # ----------------------------------------------------------------
         # Stretch Force (eq 1.5–1.9, no damping yet)
