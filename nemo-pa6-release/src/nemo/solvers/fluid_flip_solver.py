@@ -161,21 +161,15 @@ class FluidFlipSolver(SolverBase):
         mask_y = self._u_y_weights > 0
         state.fluid_u_y[mask_y] /= self._u_y_weights[mask_y]
 
-        # track which edges have valid (water-influenced) velocity
-        self._valid_u_x = mask_x
-        self._valid_u_y = mask_y
+        # track valid edges from particle-to-grid weights
+        self._valid_u_x = mask_x.copy()
+        self._valid_u_y = mask_y.copy()
 
         # enforce solid-wall boundary: boundary edges must be zero (no penetration)
         state.fluid_u_x[:, 0] = 0.0   # left wall
         state.fluid_u_x[:, -1] = 0.0  # right wall
         state.fluid_u_y[0, :] = 0.0   # bottom wall
         state.fluid_u_y[-1, :] = 0.0  # top wall
-
-        # also exclude boundary edges from valid mask so they don't affect extrapolation
-        self._valid_u_x[:, 0] = False
-        self._valid_u_x[:, -1] = False
-        self._valid_u_y[0, :] = False
-        self._valid_u_y[-1, :] = False
 
     def _voxel_out_of_domain(self, ix: int, iy: int) -> bool:
         """Check if a voxel coordinate is out of the fluid domain."""
