@@ -290,6 +290,12 @@ class FluidFlipSolver(SolverBase):
                     p_below = p[self._voxel2index[iy - 1, ix]] if below else 0.0
                     state.fluid_u_y[iy, ix] -= scale * (p_above - p_below)
 
+        # re-enforce solid-wall boundary after pressure correction
+        state.fluid_u_x[:, 0] = 0.0
+        state.fluid_u_x[:, -1] = 0.0
+        state.fluid_u_y[0, :] = 0.0
+        state.fluid_u_y[-1, :] = 0.0
+
     def _transfer_grid_velocity_to_particles(self, par_voxel_coord: nparray, old_u_x: nparray, old_u_y: nparray, state_in: State, state_out: State):
         model = self.model
 
