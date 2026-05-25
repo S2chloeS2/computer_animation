@@ -307,6 +307,17 @@ class FluidFlipSolver(SolverBase):
         u_x_old = extrapolate_velocity_field(old_u_x, self._valid_u_x)
         u_y_old = extrapolate_velocity_field(old_u_y, self._valid_u_y)
 
+        # re-enforce solid-wall boundary after extrapolation
+        u_x_now[:, 0] = 0.0;  u_x_now[:, -1] = 0.0
+        u_y_now[0, :] = 0.0;  u_y_now[-1, :] = 0.0
+        u_x_old[:, 0] = 0.0;  u_x_old[:, -1] = 0.0
+        u_y_old[0, :] = 0.0;  u_y_old[-1, :] = 0.0
+
+        def sample(grid, jj, ii):
+            jj = max(0, min(jj, grid.shape[0] - 1))
+            ii = max(0, min(ii, grid.shape[1] - 1))
+            return grid[jj, ii]
+
         n_particles = state_out.fluid_particle_q.shape[0]
         for p in range(n_particles):
             px, py = state_out.fluid_particle_q[p, 0], state_out.fluid_particle_q[p, 1]
@@ -317,13 +328,6 @@ class FluidFlipSolver(SolverBase):
             i0, j0 = int(np.floor(fx)), int(np.floor(fy))
             i1, j1 = i0 + 1, j0 + 1
             s, t = fx - i0, fy - j0
-            res_y_x = u_x_now.shape[0]
-            res_x_x = u_x_now.shape[1]
-
-            def sample(grid, jj, ii):
-                jj = max(0, min(jj, grid.shape[0] - 1))
-                ii = max(0, min(ii, grid.shape[1] - 1))
-                return grid[jj, ii]
 
             u_x_pic  = ((1-s)*(1-t)*sample(u_x_now, j0, i0) + s*(1-t)*sample(u_x_now, j0, i1)
                       + (1-s)*t    *sample(u_x_now, j1, i0) + s*t    *sample(u_x_now, j1, i1))
