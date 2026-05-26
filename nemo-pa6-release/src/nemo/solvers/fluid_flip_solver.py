@@ -80,7 +80,7 @@ class FluidFlipSolver(SolverBase):
         # number of water voxels (varying in time)
 
         self._GRAVITY = -9.81
-        self._FLIP_FACTOR = 0.95
+        self._FLIP_FACTOR = 0.95  # 0=pure PIC (dissipative), 1=pure FLIP (noisy)
         """FLIP weights to blend FLIP and PIC results. If this factor = 1, a complete FLIP method is used.
         (see course notes for details)
         """
