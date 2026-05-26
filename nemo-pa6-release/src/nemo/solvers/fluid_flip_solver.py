@@ -40,7 +40,7 @@ def extrapolate_velocity_field(u: nparray, valid: nparray) -> nparray:
     the particles may need the velocities stored in those air voxel edges. As a result, the interpolated particle
     velocities will be incorrectly slowed down by the air voxel edges.
 
-    This implmentation utilize scipy's convolve function for efficiency.
+    This implementation uses scipy's convolve for efficiency (one pass instead of BFS).
     """
     kernel = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]], dtype=float)
 
@@ -54,7 +54,7 @@ def extrapolate_velocity_field(u: nparray, valid: nparray) -> nparray:
 
 
 class FluidFlipSolver(SolverBase):
-    """This solver implement the fluic FLIP solver as described in the lecture.
+    """This solver implements the fluid FLIP solver as described in the lecture.
 
     NOTE: This solver considers only the fluid domain in the model and ignores the rest of the model
     (such as shapes, particles, etc.).
