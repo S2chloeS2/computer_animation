@@ -410,3 +410,20 @@ class FluidFlipSolver(SolverBase):
 
         # 5. grid-to-particle transfer with PIC/FLIP blend (Step 4)
         self._transfer_grid_velocity_to_particles(par_voxel_coord, old_u_x, old_u_y, state_in, state_out)
+
+        # 6. clamp wall-penetrating particle velocities (no-penetration at solid walls)
+        eps = 1e-5
+        px = state_out.fluid_particle_q[:, 0]
+        py = state_out.fluid_particle_q[:, 1]
+
+        mask = px <= eps
+        state_out.fluid_particle_qd[mask, 0] = np.maximum(state_out.fluid_particle_qd[mask, 0], 0.0)
+
+        mask = px >= domain_w - eps
+        state_out.fluid_particle_qd[mask, 0] = np.minimum(state_out.fluid_particle_qd[mask, 0], 0.0)
+
+        mask = py <= eps
+        state_out.fluid_particle_qd[mask, 1] = np.maximum(state_out.fluid_particle_qd[mask, 1], 0.0)
+
+        mask = py >= domain_h - eps
+        state_out.fluid_particle_qd[mask, 1] = np.minimum(state_out.fluid_particle_qd[mask, 1], 0.0)
